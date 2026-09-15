@@ -1,638 +1,525 @@
-<title>京都大阪六日行程</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国庆日本旅行规划 · 10/3 - 10/8</title>
+<script src="https://webapi.amap.com/maps?v=2.0&key=3b4ce8dfafd2272bfe9dbdd2f7be220a"></script>
 <style>
-:root{
-  --paper:#eef1f5; --surface:#ffffff; --surface-2:#f7f9fb;
-  --ink:#151d2b; --ink-2:#3c4a60; --muted:#6b7a91;
-  --rule:#dae0e9; --rule-strong:#c3ccd9;
-  --accent:#1b3a63; --chip:#e9eef5; --chip-ink:#3c4a60;
-  --l1:#0f6fb8; --l2:#1f8a5a; --l3:#c9433a; --l4:#a3761d; --l5:#6f4bb5; --l6:#c8622f;
-  --shadow:0 1px 2px rgba(21,29,43,.05), 0 10px 28px rgba(21,29,43,.07);
-  --sign:"Barlow Semi Condensed","Noto Sans SC",system-ui,sans-serif;
-  --body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --paper:#0d121a; --surface:#151c26; --surface-2:#1a222d;
-    --ink:#e9eef5; --ink-2:#bfc9d7; --muted:#8794a6;
-    --rule:#27313e; --rule-strong:#3b4756;
-    --accent:#8fb6e0; --chip:#1f2833; --chip-ink:#bfc9d7;
-    --l1:#4aa3e8; --l2:#4fbe8a; --l3:#f0776b; --l4:#d8a63f; --l5:#a184e0; --l6:#ee9257;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.35);
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f6f8; --panel: #ffffff; --ink: #1f2733; --sub: #6b7686;
+    --line: #e6e9ef; --accent: #d7263d; --accent-bright: #f46036; --accent2: #2b6de0;
   }
-}
-:root[data-theme="dark"]{
-  --paper:#0d121a; --surface:#151c26; --surface-2:#1a222d;
-  --ink:#e9eef5; --ink-2:#bfc9d7; --muted:#8794a6;
-  --rule:#27313e; --rule-strong:#3b4756;
-  --accent:#8fb6e0; --chip:#1f2833; --chip-ink:#bfc9d7;
-  --l1:#4aa3e8; --l2:#4fbe8a; --l3:#f0776b; --l4:#d8a63f; --l5:#a184e0; --l6:#ee9257;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.35);
-}
-*{box-sizing:border-box}
-body{
-  margin:0; background:var(--paper); color:var(--ink);
-  font-family:var(--body); font-size:15px; line-height:1.65;
-  -webkit-text-size-adjust:100%;
-}
-.wrap{max-width:720px; margin:0 auto; padding-block:0 56px; padding-left:18px; padding-right:18px}
-h1,h2,h3{text-wrap:balance; margin:0}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--l1); outline-offset:2px; border-radius:3px}
-.eyebrow{
-  font-family:var(--sign); font-weight:600; font-size:12px;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
-}
-.num{font-family:var(--sign); font-variant-numeric:tabular-nums}
-/* ---- masthead ---- */
-.masthead{
-  border-bottom:2px solid var(--ink); padding-block:22px 14px; margin-bottom:22px;
-}
-.masthead .kicker{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap}
-.masthead h1{
-  font-family:var(--sign); font-weight:700; font-size:clamp(30px,8.5vw,44px);
-  line-height:1.02; letter-spacing:-.01em; margin-top:8px;
-}
-.masthead h1 .jp{display:block; font-size:.42em; letter-spacing:.24em; color:var(--muted); font-weight:600; margin-top:8px}
-.dates{
-  display:flex; gap:14px; flex-wrap:wrap; margin-top:14px;
-  font-family:var(--sign); font-size:14px; color:var(--ink-2);
-}
-.dates b{font-weight:600; color:var(--ink)}
-/* ---- route strip: KIX -> Kyoto -> Osaka -> KIX ---- */
-.strip{
-  display:grid; grid-template-columns:repeat(4,1fr); gap:0;
-  background:var(--surface); border:1px solid var(--rule); border-radius:10px;
-  box-shadow:var(--shadow); overflow:hidden; margin-bottom:26px;
-}
-.strip div{
-  padding:12px 10px 13px; border-left:1px solid var(--rule); text-align:center;
-}
-.strip div:first-child{border-left:none}
-.strip .p{font-family:var(--sign); font-weight:700; font-size:15px; letter-spacing:.02em}
-.strip .n{font-size:11px; color:var(--muted); margin-top:3px; font-family:var(--sign); letter-spacing:.06em}
-.strip .bar{height:4px; margin-top:9px; border-radius:2px}
-/* ---- schematic map ---- */
-.mapcard{
-  background:var(--surface); border:1px solid var(--rule); border-radius:10px;
-  box-shadow:var(--shadow); padding:16px 14px 10px; margin-bottom:30px;
-}
-.mapcard h2{font-family:var(--sign); font-size:16px; font-weight:700; letter-spacing:.04em}
-.mapcard p{margin:4px 0 10px; font-size:12.5px; color:var(--muted)}
-.mapcard svg{display:block; width:100%; height:auto; max-width:100%}
-.mapcard text{font-family:var(--sign); font-weight:600}
-/* real map replaces the schematic once the SDK is up */
-#amap{width:100%; height:min(56vh,380px); border-radius:8px; overflow:hidden; display:none}
-.mapcard.live #amap{display:block}
-.mapcard.live .schematic,.mapcard.live .static-note{display:none}
-.maplegend{display:none; gap:10px 15px; flex-wrap:wrap; margin-top:11px;
-  font-family:var(--sign); font-size:11.5px; color:var(--muted)}
-.mapcard.live .maplegend{display:flex}
-.maplegend span{display:inline-flex; align-items:center; gap:5px}
-.maplegend i{width:9px; height:9px; border-radius:50%; flex:none}
-.pin{width:23px; height:23px; border-radius:50% 50% 50% 0; transform:rotate(-45deg);
-  display:grid; place-items:center; border:2px solid #fff;
-  box-shadow:0 2px 5px rgba(0,0,0,.4);
-  font-family:var(--sign); font-weight:700; font-size:11px; color:#fff}
-.pin b{transform:rotate(45deg)}
-.amap-info-content{font-family:var(--body); font-size:12.5px; line-height:1.5; padding:7px 9px; max-width:190px}
-.amap-info-content b{display:block; margin-bottom:3px; font-size:13px; color:#151d2b}
-/* ---- day block ---- */
-.day{margin-bottom:30px}
-.dayhead{display:flex; align-items:flex-start; gap:12px; margin-bottom:2px}
-.badge{
-  flex:none; width:44px; height:44px; border-radius:6px; color:#fff;
-  display:grid; place-items:center; line-height:1;
-  font-family:var(--sign); font-weight:700;
-}
-.badge .b1{font-size:17px}
-.badge .b2{font-size:9.5px; letter-spacing:.1em; opacity:.85; margin-top:2px}
-.dayhead .t{flex:1; min-width:0; padding-top:1px}
-.dayhead h2{font-family:var(--sign); font-size:20px; font-weight:700; letter-spacing:.01em}
-.dayhead .sub{font-size:12.5px; color:var(--muted); margin-top:2px}
-.bed{
-  display:inline-flex; align-items:center; gap:5px; margin-top:7px;
-  background:var(--chip); color:var(--chip-ink); border-radius:20px;
-  padding:3px 11px; font-size:12px; font-family:var(--sign);
-  font-weight:600; letter-spacing:.03em;
-}
-/* ---- stations along a line ---- */
-.line{list-style:none; margin:12px 0 0; padding:0 0 0 6px}
-.stop{position:relative; padding:0 0 4px 30px}
-.stop::before{ /* the line */
-  content:""; position:absolute; left:7px; top:9px; bottom:-4px;
-  width:3px; background:var(--ln); border-radius:2px;
-}
-.stop:last-child::before{bottom:auto; height:12px}
-.dot{
-  position:absolute; left:0; top:6px; width:17px; height:17px; border-radius:50%;
-  background:var(--surface); border:3px solid var(--ln);
-  display:grid; place-items:center;
-  font-family:var(--sign); font-size:9px; font-weight:700; color:var(--ln);
-}
-.stopcard{
-  background:var(--surface); border:1px solid var(--rule); border-radius:9px;
-  padding:11px 13px 12px; margin-bottom:10px; box-shadow:var(--shadow);
-}
-.stopcard h3{font-size:15px; font-weight:700; line-height:1.35}
-.stopcard p{margin:5px 0 0; font-size:13px; color:var(--ink-2); line-height:1.62}
-.meta{
-  display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:9px;
-  padding-top:9px; border-top:1px dashed var(--rule);
-}
-.yen{
-  font-family:var(--sign); font-weight:600; font-size:12px; color:var(--ink-2);
-  font-variant-numeric:tabular-nums;
-}
-.nav{
-  margin-left:auto; font-family:var(--sign); font-weight:600; font-size:12px;
-  letter-spacing:.04em; color:var(--l1); text-decoration:none;
-  border:1px solid var(--rule-strong); border-radius:5px; padding:3px 9px;
-  white-space:nowrap;
-}
-.nav:hover{border-color:var(--l1)}
-.alt{border-left:3px solid var(--rule-strong)}
-.alt h3::after{
-  content:"替代方案"; font-family:var(--sign); font-size:10px; font-weight:600;
-  letter-spacing:.1em; color:var(--muted); margin-left:7px; vertical-align:2px;
-}
-/* ---- transfer marker between cities ---- */
-.transfer{
-  display:flex; align-items:center; gap:10px; margin:2px 0 12px 36px;
-  font-family:var(--sign); font-size:12.5px; font-weight:600;
-  letter-spacing:.05em; color:var(--ink-2);
-}
-.transfer::before{
-  content:"⇄"; flex:none; width:22px; height:22px; border-radius:50%;
-  background:var(--ink); color:var(--paper); display:grid; place-items:center;
-  font-size:12px;
-}
-/* ---- reference sections ---- */
-.ref{
-  background:var(--surface); border:1px solid var(--rule); border-radius:10px;
-  box-shadow:var(--shadow); padding:16px 15px; margin-bottom:14px;
-}
-.ref h2{
-  font-family:var(--sign); font-size:13px; font-weight:700;
-  letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
-  padding-bottom:9px; border-bottom:1px solid var(--rule); margin-bottom:11px;
-}
-.kv{display:grid; grid-template-columns:auto 1fr; gap:7px 14px; font-size:13.5px}
-.kv dt{font-family:var(--sign); font-weight:600; color:var(--muted); letter-spacing:.03em; white-space:nowrap}
-.kv dd{margin:0; color:var(--ink-2); font-variant-numeric:tabular-nums}
-.ref ul{margin:0; padding-left:18px; font-size:13.5px; color:var(--ink-2)}
-.ref li{margin-bottom:6px}
-.ref li:last-child{margin-bottom:0}
-.tel{font-family:var(--sign); font-weight:700; font-variant-numeric:tabular-nums; color:var(--ink)}
-.foot{
-  margin-top:26px; padding-top:14px; border-top:1px solid var(--rule);
-  font-size:12px; color:var(--muted); text-align:center; font-family:var(--sign);
-  letter-spacing:.04em;
-}
-@media (max-width:420px){
-  .strip{grid-template-columns:repeat(2,1fr)}
-  .strip div:nth-child(3){border-left:none}
-  .strip div:nth-child(n+3){border-top:1px solid var(--rule)}
-}
-@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
-</style>
-<div class="wrap">
+  body { font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: var(--bg); color: var(--ink); height: 100vh; overflow: hidden; }
 
-<header class="masthead">
-  <div class="kicker">
-    <span class="eyebrow">国庆假期 · 关西</span>
-    <span class="eyebrow" style="color:var(--l3)">5 晚 6 天</span>
-  </div>
-  <h1>京都 · 大阪<span class="jp">KYOTO — OSAKA</span></h1>
-  <div class="dates">
-    <span><b>10/3</b> 傍晚抵达 KIX</span>
-    <span><b>10/8</b> 14:00 KIX 起飞</span>
+  /* 地图加载动画 */
+  #mapLoading {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    text-align: center; z-index: 1000; font-size: 14px; color: #6b7686;
+  }
+  #mapLoading::after {
+    content: ''; display: block; width: 40px; height: 40px; margin: 10px auto;
+    border: 3px solid #f3f3f3; border-top: 3px solid #d7263d;
+    border-radius: 50%; animation: spin 1s linear infinite;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  header {
+    background: linear-gradient(100deg, var(--accent), var(--accent-bright));
+    color: #fff; padding: 14px 22px; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  header h1 { font-size: 18px; font-weight: 700; }
+  header .meta { font-size: 12.5px; opacity: .92; }
+  .switch { display: flex; background: rgba(255,255,255,.18); border-radius: 10px; padding: 4px; }
+  .switch button {
+    border: none; background: transparent; color: #fff; padding: 8px 16px;
+    font-size: 13.5px; font-weight: 600; border-radius: 7px; cursor: pointer;
+    transition: .2s; white-space: nowrap;
+  }
+  .switch button.active { background: #fff; color: var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+
+  /* 日期按钮组 */
+  .day-tabs {
+    background: #fff; border-bottom: 1px solid var(--line);
+    padding: 12px 18px; display: flex; gap: 8px; overflow-x: auto; flex-wrap: wrap;
+  }
+  .day-tabs::-webkit-scrollbar { height: 4px; }
+  .day-tabs::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+  .day-tab {
+    border: 1.5px solid var(--line); background: #fff; color: var(--ink);
+    padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: all .2s;
+    font-size: 12.5px; white-space: nowrap; display: flex; align-items: center; gap: 6px;
+    font-weight: 500;
+  }
+  .day-tab:hover { border-color: var(--accent); background: #fef9fa; }
+  .day-tab.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(215, 38, 61, 0.3); font-weight: 600;
+  }
+  .day-tab-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .day-tab.active .day-tab-dot { background: rgba(255,255,255,0.4) !important; }
+
+  .layout { display: flex; height: calc(100vh - 58px - 52px); }
+  .sidebar { width: 420px; min-width: 420px; background: var(--panel);
+    border-right: 1px solid var(--line); overflow-y: auto; padding: 18px 20px 40px; }
+  #map { flex: 1; height: 100%; }
+
+  .plan-head { padding: 6px 2px 16px; border-bottom: 2px solid var(--line); margin-bottom: 14px; }
+  .plan-head h2 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .plan-head p { font-size: 13px; color: var(--sub); margin-top: 8px; line-height: 1.65; }
+  .tag { display: inline-block; background: #fdeaed; color: var(--accent);
+    font-size: 11px; padding: 4px 10px; border-radius: 20px; margin: 6px 6px 0 0; font-weight: 600; }
+
+  .info-section {
+    background: linear-gradient(135deg, #fff8f0 0%, #fff 100%);
+    border: 1px solid #ffe4cc; border-radius: 12px; padding: 14px 16px; margin-bottom: 16px;
+  }
+  .info-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: var(--ink); }
+  .info-section p { font-size: 12.5px; color: var(--sub); line-height: 1.7; margin-bottom: 6px; }
+  .info-section strong { color: var(--ink); font-weight: 600; }
+
+  .day { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+    transition: box-shadow .2s; }
+  .day:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+  .day-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer;
+    background: #fbfbfd; transition: background .2s; }
+  .day-head:hover { background: #f5f6f8; }
+  .day-head:active { background: #eef0f3; }
+  .day-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .day-head .d-date { font-size: 12.5px; color: var(--sub); }
+  .day-head .d-title { font-size: 15px; font-weight: 700; margin-top: 2px; }
+  .day-head .chev { margin-left: auto; color: var(--sub); font-size: 12px; transition: .2s; }
+  .day.open .chev { transform: rotate(90deg); }
+  .day-body { display: none; padding: 4px 14px 14px; }
+  .day.open .day-body { display: block; }
+
+  .spot { display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid #f2f3f6; cursor: pointer; }
+  .spot:first-child { border-top: none; }
+  .spot:hover .s-name { color: var(--accent); }
+  .s-num { width: 22px; height: 22px; border-radius: 50%; color: #fff; font-size: 11.5px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; font-weight: 700; }
+  .s-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .s-desc { font-size: 12.5px; color: var(--sub); line-height: 1.6; margin-top: 4px; }
+  .s-meta { font-size: 11.5px; color: #8b6914; background: #fffbf0; padding: 4px 8px;
+    border-radius: 6px; margin-top: 6px; display: inline-block; border: 1px solid #f7e9c8; }
+  .stay { font-size: 12px; color: #b3792b; background: #fff6e6; padding: 8px 12px;
+    border-radius: 8px; margin-top: 10px; display: inline-block; font-weight: 500; }
+  .hint { font-size: 11.5px; color: var(--sub); text-align: center; padding: 10px; }
+
+  /* 地图浮动面板 */
+  .map-day-panel {
+    position: absolute; top: 20px; right: 20px; width: 340px; max-height: calc(100vh - 160px);
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
+    border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    padding: 20px; overflow-y: auto; z-index: 999;
+    display: none; animation: slideIn .3s ease;
+  }
+  .map-day-panel.active { display: block; }
+  @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+  .panel-close { position: absolute; top: 16px; right: 16px; width: 26px; height: 26px;
+    border-radius: 50%; background: #f0f1f3; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; font-size: 18px; color: #6b7686; transition: .2s; }
+  .panel-close:hover { background: #e6e9ef; transform: rotate(90deg); }
+  .panel-head { padding-right: 34px; margin-bottom: 16px; border-bottom: 2px solid var(--line); padding-bottom: 14px; }
+  .panel-head .p-date { font-size: 12.5px; color: var(--sub); }
+  .panel-head .p-title { font-size: 17px; font-weight: 700; margin-top: 6px; }
+  .panel-spot { display: flex; gap: 12px; padding: 11px 0; border-top: 1px solid #f5f6f8; }
+  .panel-spot:first-child { border-top: none; }
+  .panel-spot .ps-num { width: 26px; height: 26px; border-radius: 50%; color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700; flex-shrink: 0; }
+  .panel-spot .ps-name { font-size: 14.5px; font-weight: 600; margin-bottom: 6px; }
+  .panel-spot .ps-desc { font-size: 12.5px; color: var(--sub); line-height: 1.6; }
+  .panel-spot .ps-meta { font-size: 11px; color: #8b6914; background: #fffbf0; padding: 3px 7px;
+    border-radius: 5px; margin-top: 5px; display: inline-block; border: 1px solid #f7e9c8; }
+  .panel-stay { font-size: 12px; color: #b3792b; background: #fff6e6;
+    padding: 10px 14px; border-radius: 8px; margin-top: 14px; font-weight: 500; }
+
+  /* 标记动画 */
+  @keyframes markerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+  .marker-highlight {
+    animation: markerPulse 0.6s ease-in-out 2;
+  }
+
+  .num-icon { background: transparent; border: none; }
+  .num-icon div { width: 26px; height: 26px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:12.5px;
+    box-shadow: 0 3px 8px rgba(0,0,0,.35); border: 2px solid #fff; transition: all .25s ease;
+  }
+  .num-icon div span { transform: rotate(45deg); display: block; }
+  .num-icon.highlighted div {
+    width: 32px; height: 32px; font-size: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.45);
+  }
+  .amap-icon-content { width: 34px; height: 34px; }
+
+  @media (max-width: 1100px) { .map-day-panel { width: 300px; right: 12px; top: 12px; } }
+  @media (max-width: 800px) {
+    .layout{ flex-direction: column; }
+    .sidebar{ width:100%; min-width:0; height: 50%; }
+    #map{ height:50%; }
+    .map-day-panel { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🇯🇵 国庆日本旅行规划 · 京都 & 大阪</h1>
+    <div class="meta">10/3 傍晚抵达 · 10/8 下午返程 · 共 5 晚 6 天 · 关西国际机场 (KIX)</div>
   </div>
 </header>
 
-<div class="strip">
-  <div>
-    <div class="p">KIX</div>
-    <div class="n">10/3 抵达</div>
-    <div class="bar" style="background:var(--rule-strong)"></div>
-  </div>
-  <div>
-    <div class="p">京都</div>
-    <div class="n">2 晚 · 10/3–4</div>
-    <div class="bar" style="background:var(--l1)"></div>
-  </div>
-  <div>
-    <div class="p">大阪</div>
-    <div class="n">3 晚 · 10/5–7</div>
-    <div class="bar" style="background:var(--l4)"></div>
-  </div>
-  <div>
-    <div class="p">KIX</div>
-    <div class="n">10/8 返程</div>
-    <div class="bar" style="background:var(--rule-strong)"></div>
-  </div>
-</div>
+<div class="day-tabs" id="dayTabs"></div>
 
-<section class="mapcard" id="mapcard">
-  <h2>行程地图</h2>
-  <p class="static-note">相对位置示意，非实际比例。数字为标注的行程天数。</p>
-  <div id="amap"></div>
-  <div class="maplegend" id="maplegend"></div>
-  <svg class="schematic" viewBox="0 0 400 268" role="img" aria-label="关西地区示意图：京都在北，宇治与奈良在东南，大阪在西南，关西机场在最南">
-    <!-- rails -->
-    <g stroke-linecap="round" fill="none" stroke-width="3.5">
-      <!-- Kyoto -> Uji -> Nara -->
-      <path d="M150 52 L196 96" stroke="var(--l2)"/>
-      <path d="M196 96 L262 148" stroke="var(--l4)"/>
-      <!-- Kyoto -> Arashiyama / Fushimi -->
-      <path d="M150 52 L74 66" stroke="var(--l3)"/>
-      <path d="M150 52 L164 104" stroke="var(--l3)"/>
-      <!-- Kyoto -> Osaka -->
-      <path d="M150 52 L96 152" stroke="var(--l4)" stroke-dasharray="1 8"/>
-      <!-- Nara -> Osaka -->
-      <path d="M262 148 L112 160" stroke="var(--l5)"/>
-      <!-- Osaka -> USJ -->
-      <path d="M96 152 L44 130" stroke="var(--l6)"/>
-      <!-- Osaka -> KIX -->
-      <path d="M96 152 L64 232" stroke="var(--rule-strong)"/>
-      <!-- KIX -> Kyoto (arrival, HARUKA) -->
-      <path d="M64 232 L150 52" stroke="var(--l1)" stroke-dasharray="7 7" stroke-width="2.5"/>
-    </g>
-    <!-- nodes -->
-    <g>
-      <circle cx="150" cy="52" r="9" fill="var(--l1)"/>
-      <text x="164" y="46" font-size="14" fill="var(--ink)">京都</text>
-      <text x="164" y="60" font-size="10" fill="var(--muted)" letter-spacing="1">2 NIGHTS</text>
-
-      <circle cx="74" cy="66" r="5.5" fill="var(--l3)"/>
-      <text x="30" y="56" font-size="11" fill="var(--ink-2)">岚山 ③</text>
-
-      <circle cx="164" cy="104" r="5.5" fill="var(--l3)"/>
-      <text x="174" y="108" font-size="11" fill="var(--ink-2)">伏见稻荷 ③</text>
-
-      <circle cx="196" cy="96" r="5.5" fill="var(--l2)"/>
-      <text x="200" y="86" font-size="11" fill="var(--ink-2)">宇治 ②</text>
-
-      <circle cx="262" cy="148" r="7" fill="var(--l4)"/>
-      <text x="272" y="152" font-size="12" fill="var(--ink)">奈良 ④</text>
-
-      <circle cx="96" cy="152" r="9" fill="var(--l4)"/>
-      <text x="108" y="176" font-size="14" fill="var(--ink)">大阪</text>
-      <text x="108" y="190" font-size="10" fill="var(--muted)" letter-spacing="1">3 NIGHTS</text>
-
-      <circle cx="44" cy="130" r="5.5" fill="var(--l6)"/>
-      <text x="6" y="120" font-size="11" fill="var(--ink-2)">USJ ⑤</text>
-
-      <circle cx="64" cy="232" r="7" fill="var(--rule-strong)"/>
-      <text x="78" y="236" font-size="12" fill="var(--ink)">KIX 关西机场</text>
-    </g>
-    <!-- legend -->
-    <g font-size="10" fill="var(--muted)">
-      <line x1="232" y1="222" x2="256" y2="222" stroke="var(--l1)" stroke-width="2.5" stroke-dasharray="7 7"/>
-      <text x="262" y="226">抵达 HARUKA 75 min</text>
-      <line x1="232" y1="240" x2="256" y2="240" stroke="var(--l4)" stroke-width="3" stroke-dasharray="1 8"/>
-      <text x="262" y="244">换城 10/5</text>
-    </g>
-  </svg>
-</section>
-
-<section class="day" style="--ln:var(--l1)">
-  <div class="dayhead">
-    <div class="badge" style="background:var(--l1)"><div><div class="b1">1</div><div class="b2">10/3</div></div></div>
-    <div class="t">
-      <h2>抵达，直上京都</h2>
-      <div class="sub">周六 · 傍晚落地，当晚不安排远行</div>
-      <div class="bed">🛏 京都 · 京都站 / 河原町</div>
+<div class="layout">
+  <div class="sidebar" id="sidebar"></div>
+  <div id="map" style="position: relative;">
+    <div id="mapLoading">加载地图中...</div>
+    <div class="map-day-panel" id="mapPanel">
+      <div class="panel-close" onclick="closeDayPanel()">×</div>
+      <div id="panelContent"></div>
     </div>
   </div>
-  <ol class="line">
-    <li class="stop"><span class="dot">1</span>
-      <div class="stopcard" data-lat="34.4320" data-lng="135.2304">
-        <h3>关西国际机场 KIX</h3>
-        <p>下午 5–7 点落地。HARUKA 特急直达京都站约 75 分钟，是最省心的一趟；机场巴士约 90 分钟但能到酒店门口。</p>
-        <div class="meta"><span class="yen">HARUKA ¥3,430</span>
-          <a class="nav" href="https://maps.apple.com/?q=関西国際空港" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">2</span>
-      <div class="stopcard" data-lat="34.9859" data-lng="135.7589">
-        <h3>京都站 · 拉面小路</h3>
-        <p>入住后放行李。京都站伊势丹 10F 拉面小路，博多一幸舍、中村商店都在这层，落地第一餐不用走远。</p>
-        <div class="meta"><span class="yen">拉面 ¥1,000</span>
-          <a class="nav" href="https://maps.apple.com/?q=京都駅" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">3</span>
-      <div class="stopcard" data-lat="34.9875" data-lng="135.7594">
-        <h3>京都塔展望台</h3>
-        <p>就在京都站对面，还有精力就上去看一眼夜景，十几分钟的事，也算给行程开个场。</p>
-        <div class="meta"><span class="yen">展望台 ¥800</span>
-          <a class="nav" href="https://maps.apple.com/?q=京都タワー" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-  </ol>
-</section>
-
-<section class="day" style="--ln:var(--l2)">
-  <div class="dayhead">
-    <div class="badge" style="background:var(--l2)"><div><div class="b1">2</div><div class="b2">10/4</div></div></div>
-    <div class="t">
-      <h2>宇治抹茶，东山到鸭川</h2>
-      <div class="sub">周日 · 上午宇治，下午东山，傍晚鸭川</div>
-      <div class="bed">🛏 京都</div>
-    </div>
-  </div>
-  <ol class="line">
-    <li class="stop"><span class="dot">1</span>
-      <div class="stopcard" data-lat="34.8893" data-lng="135.8076">
-        <h3>宇治 · 平等院</h3>
-        <p>JR 奈良线约 20 分钟到宇治站。10 円硬币背面就是这座凤凰堂，正面水池的倒影是重点。9:00 前到，人少光也好。</p>
-        <div class="meta"><span class="yen">JR ¥240 · 门票 ¥600</span>
-          <a class="nav" href="https://maps.apple.com/?q=平等院" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">2</span>
-      <div class="stopcard" data-lat="34.8907" data-lng="135.8080">
-        <h3>宇治抹茶巡礼</h3>
-        <p>中村藤吉本店的生茶果冻和抹茶芭菲、伊藤久右卫门的茶点，沿宇治川走到宇治桥。这站慢慢逛，别赶。</p>
-        <div class="meta"><span class="yen">抹茶 ¥1,500</span>
-          <a class="nav" href="https://maps.apple.com/?q=中村藤吉本店" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">3</span>
-      <div class="stopcard" data-lat="34.9948" data-lng="135.7850">
-        <h3>清水寺</h3>
-        <p>下午回京都市区。清水舞台俯瞰全城，音羽瀑布三道水各有说法只能选一道。想穿和服在这一带租最合适。</p>
-        <div class="meta"><span class="yen">门票 ¥400 · 和服 ¥3,850</span>
-          <a class="nav" href="https://maps.apple.com/?q=清水寺" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">4</span>
-      <div class="stopcard" data-lat="35.0036" data-lng="135.7785">
-        <h3>八坂神社 → 鸭川</h3>
-        <p>二年坂三年坂快速穿过就好，人多且店铺同质。重点留给鸭川：四条大桥边有台阶可以直接下到河滩，坐在跳石上看日落，比挤石板路舒服得多。</p>
-        <div class="meta"><span class="yen">免费</span>
-          <a class="nav" href="https://maps.apple.com/?q=鴨川+四条大橋" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-  </ol>
-</section>
-
-<section class="day" style="--ln:var(--l3)">
-  <div class="dayhead">
-    <div class="badge" style="background:var(--l3)"><div><div class="b1">3</div><div class="b2">10/5</div></div></div>
-    <div class="t">
-      <h2>伏见稻荷、岚山，换城大阪</h2>
-      <div class="sub">周一 · 早起两站，午后带行李移动</div>
-      <div class="bed">🛏 大阪 · 难波</div>
-    </div>
-  </div>
-  <ol class="line">
-    <li class="stop"><span class="dot">1</span>
-      <div class="stopcard" data-lat="34.9671" data-lng="135.7727">
-        <h3>伏见稻荷大社</h3>
-        <p>千本鸟居，7:00–8:00 到基本没人，是全天唯一能拍到空镜的窗口。爬到山顶来回约 2 小时，只到中途的四辻折返也够看。JR 稻荷站下车即到。</p>
-        <div class="meta"><span class="yen">免费 · JR ¥150</span>
-          <a class="nav" href="https://maps.apple.com/?q=伏見稲荷大社" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">2</span>
-      <div class="stopcard" data-lat="35.0170" data-lng="135.6717">
-        <h3>岚山 · 竹林与渡月桥</h3>
-        <p>嵯峨野竹林小径、渡月桥、天龙寺庭园。午餐这边的汤豆腐比较对得起环境。想坐嵯峨野小火车要提前留出时间。</p>
-        <div class="meta"><span class="yen">天龙寺 ¥500 · 午餐 ¥1,800</span>
-          <a class="nav" href="https://maps.apple.com/?q=渡月橋" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-  </ol>
-  <div class="transfer">京都 → 大阪难波 · JR 或阪急约 45 分钟 · ¥560</div>
-  <ol class="line">
-    <li class="stop"><span class="dot">3</span>
-      <div class="stopcard" data-lat="34.6687" data-lng="135.5013">
-        <h3>难波 · 道顿堀</h3>
-        <p>入住后出门就是道顿堀。格力高招牌、章鱼烧、一兰拉面，戎桥上晚上永远在拍照。这一晚不用计划，随便走。</p>
-        <div class="meta"><span class="yen">晚餐 ¥2,000</span>
-          <a class="nav" href="https://maps.apple.com/?q=道頓堀" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-  </ol>
-</section>
-
-<section class="day" style="--ln:var(--l4)">
-  <div class="dayhead">
-    <div class="badge" style="background:var(--l4)"><div><div class="b1">4</div><div class="b2">10/6</div></div></div>
-    <div class="t">
-      <h2>奈良喂鹿，傍晚大阪城</h2>
-      <div class="sub">周二 · 大阪当天往返奈良</div>
-      <div class="bed">🛏 大阪 · 难波</div>
-    </div>
-  </div>
-  <ol class="line">
-    <li class="stop"><span class="dot">1</span>
-      <div class="stopcard" data-lat="34.6889" data-lng="135.8398">
-        <h3>东大寺</h3>
-        <p>近铁难波直达奈良约 45 分钟。世界最大的木造建筑，里面那尊奈良大佛值得站着看一会儿。9 点开门就到最好。</p>
-        <div class="meta"><span class="yen">近铁 ¥680 · 门票 ¥600</span>
-          <a class="nav" href="https://maps.apple.com/?q=東大寺" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">2</span>
-      <div class="stopcard" data-lat="34.6851" data-lng="135.8430">
-        <h3>奈良公园</h3>
-        <p>一千多头鹿散养在这儿。鹿仙贝 ¥200 一份，拿出来会被围住，举高、快速喂完是诀窍。会鞠躬的鹿真的存在。留 1–1.5 小时。</p>
-        <div class="meta"><span class="yen">鹿仙贝 ¥200</span>
-          <a class="nav" href="https://maps.apple.com/?q=奈良公園" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">3</span>
-      <div class="stopcard" data-lat="34.6799" data-lng="135.8301">
-        <h3>奈良町</h3>
-        <p>午餐往南走到奈良町，古民家改的餐厅，柿叶寿司和大和茶是本地做法。格子之家可以顺路看看，然后回大阪。</p>
-        <div class="meta"><span class="yen">午餐 ¥1,500</span>
-          <a class="nav" href="https://maps.apple.com/?q=奈良町" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">4</span>
-      <div class="stopcard" data-lat="34.6873" data-lng="135.5259">
-        <h3>大阪城</h3>
-        <p>傍晚回大阪补这一站。天守阁可以登顶俯瞰，护城河和西之丸庭园在夕阳下比正午好看。天守 17:00 停止入场，赶不上就在园里走走。</p>
-        <div class="meta"><span class="yen">天守阁 ¥600</span>
-          <a class="nav" href="https://maps.apple.com/?q=大阪城" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-  </ol>
-</section>
-
-<section class="day" style="--ln:var(--l6)">
-  <div class="dayhead">
-    <div class="badge" style="background:var(--l6)"><div><div class="b1">5</div><div class="b2">10/7</div></div></div>
-    <div class="t">
-      <h2>环球影城，或者海游馆</h2>
-      <div class="sub">周三 · 二选一，都是一整天</div>
-      <div class="bed">🛏 大阪 · 难波</div>
-    </div>
-  </div>
-  <ol class="line">
-    <li class="stop"><span class="dot">1</span>
-      <div class="stopcard" data-lat="34.6654" data-lng="135.4322">
-        <h3>USJ 环球影城</h3>
-        <p>地铁加 JR 约 30 分钟到 ユニバーサルシティ 站。哈利波特、超级任天堂世界、小黄人。国庆期间热门项目排队 1–2 小时，快速通行券基本是必需品，且要提前在官网买。</p>
-        <div class="meta"><span class="yen">门票 ¥8,900 起 · 快票 ¥7,800 起</span>
-          <a class="nav" href="https://maps.apple.com/?q=ユニバーサル・スタジオ・ジャパン" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">2</span>
-      <div class="stopcard alt" data-lat="34.6546" data-lng="135.4289">
-        <h3>海游馆</h3>
-        <p>不想排队和坐过山车就换这边。世界级水族馆，中央那缸太平洋鲸鲨是招牌。旁边天保山大摩天轮 ¥1,000，节奏轻松很多。</p>
-        <div class="meta"><span class="yen">门票 ¥2,700 · 摩天轮 ¥1,000</span>
-          <a class="nav" href="https://maps.apple.com/?q=海遊館" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">3</span>
-      <div class="stopcard" data-lat="34.6547" data-lng="135.4283">
-        <h3>天保山 · 食街晚餐</h3>
-        <p>海游馆旁边的なにわ食いしんぼ横丁，复刻昭和街景的美食街，章鱼烧、串炸、大阪烧都有。玩完就近吃了再回难波。</p>
-        <div class="meta"><span class="yen">晚餐 ¥1,500</span>
-          <a class="nav" href="https://maps.apple.com/?q=天保山マーケットプレース" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-  </ol>
-</section>
-
-<section class="day" style="--ln:var(--l5)">
-  <div class="dayhead">
-    <div class="badge" style="background:var(--l5)"><div><div class="b1">6</div><div class="b2">10/8</div></div></div>
-    <div class="t">
-      <h2>心斋桥扫货，从难波走</h2>
-      <div class="sub">周四 · 14:00 起飞，上午完整可用</div>
-      <div class="bed">✈ 难波 → KIX 仅 38 分钟</div>
-    </div>
-  </div>
-  <ol class="line">
-    <li class="stop"><span class="dot">1</span>
-      <div class="stopcard" data-lat="34.6658" data-lng="135.5065">
-        <h3>黑门市场</h3>
-        <p>大阪的厨房，离难波走路就到。海鲜丼、神户牛串、现烤扇贝、切好的水果，当早餐吃得很饱。8:30 左右店陆续开。</p>
-        <div class="meta"><span class="yen">早餐 ¥1,500</span>
-          <a class="nav" href="https://maps.apple.com/?q=黒門市場" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">2</span>
-      <div class="stopcard" data-lat="34.6723" data-lng="135.5007">
-        <h3>心斋桥筋</h3>
-        <p>最后的采购主场。松本清、唐吉诃德、BIC CAMERA、优衣库、无印良品全在这条拱廊上，药妆零食电器一次搞定。带好护照退税。10:30 前收工回酒店拿行李。</p>
-        <div class="meta"><span class="yen">按清单</span>
-          <a class="nav" href="https://maps.apple.com/?q=心斎橋筋商店街" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-    <li class="stop"><span class="dot">3</span>
-      <div class="stopcard" data-lat="34.4320" data-lng="135.2304">
-        <h3>难波 → 关西机场</h3>
-        <p>南海电铁 Rapi:t 特急 38 分钟直达。11:00 出发，11:40 到，12:00 前值机完，离起飞还有两小时。这是把大阪放在最后一晚最大的好处。</p>
-        <div class="meta"><span class="yen">Rapi:t ¥1,450</span>
-          <a class="nav" href="https://maps.apple.com/?q=南海難波駅" target="_blank" rel="noopener">导航</a></div>
-      </div></li>
-  </ol>
-</section>
-
-<section class="ref">
-  <h2>交通与票券</h2>
-  <ul>
-    <li><b>ICOCA</b> — 落地先办，地铁、JR、便利店都能刷，省去每次买票。</li>
-    <li><b>HARUKA 特急</b> — 10/3 机场进京都，¥3,430，75 分钟。</li>
-    <li><b>Rapi:t 特急</b> — 10/8 难波回机场，¥1,450，38 分钟。</li>
-    <li><b>关西周游券 Kansai Thru Pass</b> — 2 日或 3 日券，地铁巴士无限次。按这份行程，10/5–10/7 三天在大阪京都之间跑，用 3 日券基本能回本；只打算刷 ICOCA 也完全可行。</li>
-  </ul>
-</section>
-
-<section class="ref">
-  <h2>预算参考 · 每人每天</h2>
-  <dl class="kv">
-    <dt>住宿</dt><dd>¥6,000 – 10,000（双人一间均摊后更低）</dd>
-    <dt>市内交通</dt><dd>¥800 – 1,500</dd>
-    <dt>门票</dt><dd>¥500 – 1,500（10/7 环球日 ¥17,000 上下）</dd>
-    <dt>三餐</dt><dd>¥4,000 – 6,000</dd>
-    <dt>购物</dt><dd>按清单，集中在 10/8</dd>
-  </dl>
-</section>
-
-<section class="ref">
-  <h2>要记的几件事</h2>
-  <ul>
-    <li>只搬一次行李 —— 10/5 从京都到大阪。前两晚京都、后三晚大阪，中间不用来回折腾。</li>
-    <li>两个必须早起的早上：10/4 去宇治（9:00 到平等院）、10/5 去伏见稻荷（7:00–8:00）。</li>
-    <li>USJ 快速通行券要提前在官网买，国庆期间当天现场基本买不到。</li>
-    <li>退税记得带护照，心斋桥各家门店都能办。</li>
-  </ul>
-</section>
-
-<section class="ref">
-  <h2>紧急联络</h2>
-  <dl class="kv">
-    <dt>中国驻大阪总领馆</dt><dd class="tel">06-6445-9481</dd>
-    <dt>急救 / 消防</dt><dd class="tel">119</dd>
-    <dt>警察</dt><dd class="tel">110</dd>
-  </dl>
-</section>
-
-<div class="foot">点地图上的编号或任意一站的「导航」查看位置 · 行程更新后刷新本页即可</div>
-
 </div>
 
 <script>
-(function(){
-  var KEY='3b4ce8dfafd2272bfe9dbdd2f7be220a';
-  var COLORS=['#0f6fb8','#1f8a5a','#c9433a','#a3761d','#c8622f','#6f4bb5'];
+const DAY_COLORS = ['#d7263d','#f46036','#e6a817','#2ca05a','#2b6de0','#7d4fd0'];
 
-  // Read the itinerary straight out of the DOM so the map can never drift
-  // from the text above it.
-  var days=[].map.call(document.querySelectorAll('.day'),function(sec,i){
-    return {
-      idx:i+1,
-      date:(sec.querySelector('.badge .b2')||{}).textContent||'',
-      title:(sec.querySelector('.dayhead h2')||{}).textContent||'',
-      color:COLORS[i%COLORS.length],
-      stops:[].map.call(sec.querySelectorAll('.stopcard[data-lat]'),function(c,j){
-        return {
-          n:j+1,
-          name:(c.querySelector('h3')||{}).textContent||'',
-          alt:c.classList.contains('alt'),
-          lng:parseFloat(c.dataset.lng),
-          lat:parseFloat(c.dataset.lat)
-        };
-      })
-    };
+const plan = {
+  name: '京都 & 大阪 6日游',
+  airport: '关西国际机场 (KIX)',
+  intro: '经典关西黄金路线。先玩京都的千年古韵 + 宇治抹茶 + 奈良萌鹿，后半程回大阪享受都市烟火气 + 环球影城，最后购物返程超从容。',
+  tags: ['宇治抹茶圣地', '奈良小鹿', '清水寺·祇园', '伏见稻荷·岚山', '环球影城/海游馆'],
+  budget: '💰 预算参考：住宿约 ¥600-1,000/晚，关西周游券 ¥2,800-5,500，门票+餐饮约 ¥6,000-12,000/天（含USJ）',
+  transport: '🚄 交通卡：推荐 ICOCA + 关西周游券 Kansai Thru Pass（2日/3日券，地铁巴士无限次）',
+  emergency: '🆘 紧急联系：中国驻大阪总领馆 06-6445-9481 | 日本急救 119 | 警察 110',
+  days: [
+    { date: '10/3 周六', title: '抵达 · 直达京都',
+      stay: '住宿：京都(河原町/京都站)',
+      spots: [
+        {n:'关西国际机场 KIX', c:[34.4320,135.2304], d:'下午5-7点落地。搭乘 HARUKA 特急约75分钟直达京都站，或机场巴士约90分钟。', m:'HARUKA ¥3,430'},
+        {n:'京都站周边', c:[34.9859,135.7589], d:'入住京都站或河原町附近酒店。京都站伊势丹 10F 拉面小路晚餐（博多一幸舍/中村商店）。', m:'拉面 ¥1,000'},
+        {n:'京都塔夜景', c:[34.9875,135.7594], d:'若有精力可登京都塔展望台（¥800），俯瞰京都夜景，京都站对面。', m:'展望台 ¥800'},
+      ]},
+    { date: '10/4 周日', title: '宇治抹茶 & 奈良萌鹿',
+      stay: '住宿：京都',
+      spots: [
+        {n:'宇治平等院', c:[34.8893,135.8076], d:'JR奈良线约20分钟到宇治站。10円硬币背面图案，凤凰堂倒影绝美。世界遗产，建议9:00到。', m:'JR ¥240 + 门票 ¥600'},
+        {n:'宇治抹茶巡礼', c:[34.8907,135.8080], d:'中村藤吉本店(抹茶芭菲 ¥1,200)、伊藤久右卫门、宇治川散步、宇治桥。抹茶控天堂！', m:'抹茶 ¥1,500'},
+        {n:'东大寺', c:[34.6889,135.8398], d:'从宇治沿JR奈良线继续南下约40分钟到奈良。世界最大木造建筑，奈良大佛震撼。', m:'JR ¥510 + 门票 ¥600'},
+        {n:'奈良公园(喂鹿)', c:[34.6851,135.8430], d:'与1,000+只自由散步的小鹿互动，鹿仙贝(¥200)，会作揖的鹿超可爱，记得防踩踏。建议停留1-1.5小时。', m:'鹿仙贝 ¥200'},
+        {n:'奈良町', c:[34.6799,135.8301], d:'傍晚逛奈良町(ならまち)，古民家改造餐厅，柿叶寿司(¥1,200)、大和茶，格子之家散步。晚上返回京都。', m:'晚餐 ¥1,500'},
+      ]},
+    { date: '10/5 周一', title: '伏见稻荷 · 岚山 · 京都东山',
+      stay: '住宿：京都',
+      spots: [
+        {n:'伏见稻荷大社', c:[34.9671,135.7727], d:'千本鸟居朱红隧道，京都必打卡No.1，建议7:00-8:00早去避人潮，爬到山顶往返2小时。JR稻荷站下车。', m:'免费 / JR ¥150'},
+        {n:'岚山 · 竹林 & 渡月桥', c:[35.0170,135.6717], d:'嵯峨野竹林小径、渡月桥、天龙寺庭园（¥500），可乘岚山小火车(トロッコ ¥880)。午餐推荐豆腐料理(¥1,800)。', m:'天龙寺 ¥500 / 午餐 ¥1,800'},
+        {n:'清水寺', c:[34.9948,135.7850], d:'下午回到东山，清水舞台俯瞰，音羽瀑布祈愿。可租和服拍照（冈本织物 ¥3,850/套）。', m:'门票 ¥400 / 和服 ¥3,850'},
+        {n:'八坂神社 & 鸭川散步', c:[35.0036,135.7785], d:'二年坂三年坂快速穿过，八坂神社、花见小路。傍晚到鸭川，从四条大桥可以下到河边，坐在鸭川跳石上看夕阳，超治愈。', m:'免费'},
+      ]},
+    { date: '10/6 周二', title: '移动大阪 · 大阪城 · 道顿堀',
+      stay: '住宿：大阪难波周边',
+      spots: [
+        {n:'移动大阪', c:[34.6687,135.5013], d:'上午从京都退房，搭JR或阪急约40-50分钟到大阪难波，先寄存行李入住。', m:'JR ¥560'},
+        {n:'大阪城 & 天守阁', c:[34.6873,135.5259], d:'下午游大阪城。丰臣秀吉的城，登天守俯瞰（¥600），护城河与西之丸庭园夕阳很美。', m:'天守阁 ¥600'},
+        {n:'道顿堀 & 心斋桥', c:[34.6687,135.5013], d:'傍晚逛道顿堀，格力高招牌、章鱼烧、一兰拉面(¥1,080)，心斋桥筋顺路购物。', m:'晚餐 ¥2,000'},
+      ]},
+    { date: '10/7 周三', title: '环球影城 或 海游馆',
+      stay: '住宿：大阪难波周边',
+      spots: [
+        {n:'USJ 环球影城(推荐)', c:[34.6654,135.4322], d:'地铁+JR约30分钟到ユニバーサルシティ站。哈利波特、马里奥、小黄人，建议购买快速通行券(Express Pass ¥7,800-14,800)，玩一整天。', m:'门票 ¥8,900起 + 快票 ¥7,800起'},
+        {n:'(或)海游馆', c:[34.6546,135.4289], d:'若不想刺激项目，可选海游馆。世界最大水族馆之一，鲸鲨超震撼，大阪港旁边还有摩天轮（¥1,000）。', m:'门票 ¥2,700 + 摩天轮 ¥1,000'},
+        {n:'天保山购物中心', c:[34.6547,135.4283], d:'海游馆旁，なにわ食いしんぼ横丁（大阪美食街）晚餐，章鱼烧、串炸、お好み焼き。晚上回难波住宿。', m:'晚餐 ¥1,500'},
+      ]},
+    { date: '10/8 周四', title: '大阪购物 → 返程',
+      stay: '下午2点 KIX 起飞',
+      spots: [
+        {n:'黑门市场早餐', c:[34.6658,135.5065], d:'"大阪厨房"，海鲜丼(¥1,500)、神户牛串(¥1,000)、水果、现烤扇贝，活力满满的早餐。', m:'早餐 ¥1,500'},
+        {n:'心斋桥筋 & 道顿堀', c:[34.6723,135.5007], d:'最后疯狂购物！松本清、唐吉诃德、MUJI、优衣库、BIC CAMERA，药妆零食电器一站搞定。建议10:30前结束。', m:'购物预算自定'},
+        {n:'难波 → KIX', c:[34.4320,135.2304], d:'南海电铁 Rapi:t 特急约38分钟到机场，建议11:00前出发，12:00前到机场值机。时间充裕可机场免税店再补货。', m:'南海 Rapi:t ¥1,450'},
+      ]},
+  ]
+};
+
+let map, allMarkers = [], polylines = [], currentHighlightDay = null;
+let markersByDay = [];
+
+function initMap(){
+  map = new AMap.Map('map', {
+    zoom: 7,
+    center: [135.5, 35],
+    mapStyle: 'amap://styles/normal',
+    viewMode: '2D',
+    resizeEnable: true
   });
 
-  function legend(){
-    document.getElementById('maplegend').innerHTML=days.map(function(d){
-      return '<span><i style="background:'+d.color+'"></i>'+d.date+' 第'+d.idx+'天</span>';
-    }).join('');
-  }
+  // 地图加载完成后隐藏loading
+  map.on('complete', function(){
+    const loading = document.getElementById('mapLoading');
+    if(loading) loading.style.display = 'none';
+  });
+}
 
-  function draw(){
-    var map=new AMap.Map('amap',{zoom:9,center:[135.62,34.83],viewMode:'2D',
-      mapStyle:'amap://styles/normal',resizeEnable:true});
-    var all=[];
-    days.forEach(function(d){
-      var path=[];
-      d.stops.forEach(function(s){
-        var pos=[s.lng,s.lat];
-        all.push(pos);
-        // Alternatives are not part of that day's actual走法, so they get a
-        // marker but never join the route line.
-        if(!s.alt) path.push(pos);
-        var mk=new AMap.Marker({
-          position:pos, map:map, offset:new AMap.Pixel(-11,-23), zIndex:120,
-          content:'<div class="pin" style="background:'+d.color
-            +(s.alt?';opacity:.55':'')+'"><b>'+s.n+'</b></div>'
-        });
-        var info=new AMap.InfoWindow({
-          offset:new AMap.Pixel(0,-24), closeWhenClickMap:true,
-          content:'<div class="amap-info-content"><b>'+s.name+'</b>'
-            +d.date+' 第'+d.idx+'天 · '+d.title+(s.alt?'（替代方案）':'')+'</div>'
-        });
-        mk.on('click',function(){info.open(map,pos);});
+function createMarkerIcon(num, color, highlighted = false, dimmed = false){
+  const size = highlighted ? 32 : 26;
+  const shadowSize = highlighted ? '0 4px 12px' : '0 3px 6px';
+  const opacity = dimmed ? 0.3 : 1;
+  const highlightClass = highlighted ? ' class="marker-highlight"' : '';
+  return `<div class="num-icon${highlighted ? ' highlighted' : ''}" style="opacity:${opacity}"${highlightClass}><div style="background:${color};width:${size}px;height:${size}px;box-shadow:${shadowSize} rgba(0,0,0,.4)"><span>${num}</span></div></div>`;
+}
+
+function renderMap(p){
+  allMarkers.forEach(m => m.setMap(null));
+  polylines.forEach(p => p.setMap(null));
+  allMarkers = [];
+  polylines = [];
+  markersByDay = [];
+  currentHighlightDay = null;
+
+  const allPts = [];
+  p.days.forEach((day, di) => {
+    const color = DAY_COLORS[di % DAY_COLORS.length];
+    const dayPts = [];
+    markersByDay[di] = [];
+
+    day.spots.forEach((s, si) => {
+      const pos = [s.c[1], s.c[0]];
+      dayPts.push(pos);
+      allPts.push(pos);
+
+      const marker = new AMap.Marker({
+        position: pos,
+        content: createMarkerIcon(si+1, color, false),
+        offset: new AMap.Pixel(-13, -26),
+        map: map,
+        extData: { dayIndex: di, spotIndex: si }
       });
-      if(path.length>1) new AMap.Polyline({path:path,map:map,strokeColor:d.color,
-        strokeWeight:4,strokeOpacity:.75,strokeStyle:'dashed',showDir:true,lineJoin:'round'});
+
+      const infoWindow = new AMap.InfoWindow({
+        content: `<div class="amap-info-content"><b>${day.date} · 第${di+1}天</b><b>${s.n}</b>${s.d}${s.m ? '<br><span style="color:#8b6914;font-size:11.5px">💴 ' + s.m + '</span>' : ''}</div>`,
+        offset: new AMap.Pixel(0, -26)
+      });
+
+      marker.on('click', () => {
+        infoWindow.open(map, pos);
+      });
+
+      allMarkers.push(marker);
+      markersByDay[di].push({ marker, color, spotData: s, dayData: day });
     });
-    map.on('complete',function(){
-      document.getElementById('mapcard').classList.add('live');
-      legend();
-      map.setFitView(null,false,[24,24,24,24]);
-    });
+
+    if (dayPts.length > 1){
+      const polyline = new AMap.Polyline({
+        path: dayPts,
+        strokeColor: color,
+        strokeWeight: 3,
+        strokeOpacity: 0.65,
+        strokeStyle: 'dashed',
+        showDir: true,  // 显示方向箭头
+        dirColor: color,  // 箭头颜色
+        map: map,
+        extData: { dayIndex: di }
+      });
+      polylines.push(polyline);
+    }
+  });
+
+  if (allPts.length > 0) {
+    map.setFitView(allMarkers, false, [80, 80, 80, 80]);
+  }
+}
+
+function highlightDay(dayIndex) {
+  if (dayIndex === currentHighlightDay) {
+    showAllDays();
+    return;
   }
 
-  // Load the SDK after the page is readable; if it fails the schematic stays.
-  var s=document.createElement('script');
-  s.src='https://webapi.amap.com/maps?v=2.0&key='+KEY;
-  s.async=true;
-  s.onload=function(){ if(window.AMap) try{draw();}catch(e){} };
-  document.head.appendChild(s);
-})();
+  currentHighlightDay = dayIndex;
+  const day = plan.days[dayIndex];
+  const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
+
+  setActiveTab(dayIndex);
+
+  markersByDay.forEach((dayMarkers, di) => {
+    const isHighlighted = di === dayIndex;
+    const isDimmed = !isHighlighted;
+
+    dayMarkers.forEach(({marker}, si) => {
+      const markerColor = isHighlighted ? color : '#999';
+      marker.setContent(createMarkerIcon(si+1, markerColor, isHighlighted, isDimmed));
+    });
+  });
+
+  polylines.forEach((polyline) => {
+    const di = polyline.getExtData().dayIndex;
+    if (di === dayIndex) {
+      polyline.setOptions({ strokeWeight: 5, strokeOpacity: 0.9, strokeColor: color, showDir: true, dirColor: color });
+    } else {
+      polyline.setOptions({ strokeColor: '#ccc', strokeWeight: 2, strokeOpacity: 0.3, showDir: false });
+    }
+  });
+
+  showDayPanel(day, dayIndex, color);
+
+  const dayMarkers = markersByDay[dayIndex].map(m => m.marker);
+  if (dayMarkers.length > 0) {
+    map.setFitView(dayMarkers, false, [100, 100, 100, 100]);
+  }
+}
+
+function resetHighlight() {
+  currentHighlightDay = null;
+
+  markersByDay.forEach((dayMarkers, di) => {
+    const color = DAY_COLORS[di % DAY_COLORS.length];
+    dayMarkers.forEach(({marker}, si) => {
+      marker.setContent(createMarkerIcon(si+1, color, false, false));
+    });
+  });
+
+  polylines.forEach((polyline) => {
+    const di = polyline.getExtData().dayIndex;
+    const color = DAY_COLORS[di % DAY_COLORS.length];
+    polyline.setOptions({ strokeColor: color, strokeWeight: 3, strokeOpacity: 0.65, showDir: true, dirColor: color });
+  });
+
+  if (allMarkers.length > 0) {
+    map.setFitView(allMarkers, false, [80, 80, 80, 80]);
+  }
+}
+
+function showDayPanel(day, dayIndex, color) {
+  const panel = document.getElementById('mapPanel');
+  const content = document.getElementById('panelContent');
+
+  let html = `<div class="panel-head">
+    <div class="p-date">${day.date}</div>
+    <div class="p-title">${day.title}</div>
+  </div>`;
+
+  day.spots.forEach((s, si) => {
+    html += `<div class="panel-spot" onclick="flyTo(${s.c[0]},${s.c[1]})">
+      <span class="ps-num" style="background:${color}">${si+1}</span>
+      <div>
+        <div class="ps-name">${s.n}</div>
+        <div class="ps-desc">${s.d}</div>
+        ${s.m ? '<div class="ps-meta">💴 ' + s.m + '</div>' : ''}
+      </div>
+    </div>`;
+  });
+
+  html += `<div class="panel-stay">🛏 ${day.stay}</div>`;
+
+  content.innerHTML = html;
+  panel.classList.add('active');
+}
+
+function closeDayPanel() {
+  document.getElementById('mapPanel').classList.remove('active');
+}
+
+function showAllDays(){
+  resetHighlight();
+  closeDayPanel();
+  setActiveTab('all');
+}
+
+function renderDayTabs(p){
+  const tabs = document.getElementById('dayTabs');
+  let html = `<div class="day-tab" data-tab="all" onclick="showAllDays()">🗾 全部行程</div>`;
+  p.days.forEach((day, di) => {
+    const color = DAY_COLORS[di % DAY_COLORS.length];
+    // 提取住宿地点简称
+    let stayCity = '';
+    if (day.stay.includes('名古屋')) stayCity = '住名古屋';
+    else if (day.stay.includes('高山')) stayCity = '住高山';
+    else if (day.stay.includes('下吕')) stayCity = '住下吕';
+    else if (day.stay.includes('常滑')) stayCity = '住常滑';
+    else if (day.stay.includes('京都')) stayCity = '住京都';
+    else if (day.stay.includes('大阪') || day.stay.includes('难波')) stayCity = '住大阪';
+    else if (day.stay.includes('返程') || day.stay.includes('起飞')) stayCity = '返程日';
+
+    html += `<div class="day-tab" data-tab="${di}" onclick="highlightDay(${di})">
+      <span class="day-tab-dot" style="background:${color}"></span>${day.date.split(' ')[0]} 第${di+1}天${stayCity ? ' · ' + stayCity : ''}
+    </div>`;
+  });
+  tabs.innerHTML = html;
+  setActiveTab('all');
+}
+
+function setActiveTab(tabKey){
+  document.querySelectorAll('.day-tab').forEach(t => {
+    t.classList.toggle('active', t.getAttribute('data-tab') === String(tabKey));
+  });
+}
+
+function renderSidebar(p){
+  const sb = document.getElementById('sidebar');
+  let html = `<div class="plan-head"><h2>${p.name}</h2>
+    <p>✈️ 进出机场：${p.airport}</p>
+    <p>${p.intro}</p>
+    <div>${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>`;
+
+  html += `<div class="info-section">
+    <h3>💡 实用信息</h3>
+    <p>${p.budget}</p>
+    <p>${p.transport}</p>
+    <p>${p.emergency}</p>
+  </div>`;
+
+  p.days.forEach((day, di) => {
+    const color = DAY_COLORS[di % DAY_COLORS.length];
+    html += `<div class="day open" data-day="${di}">
+      <div class="day-head" onclick="onDayHeadClick(event, ${di})">
+        <span class="day-dot" style="background:${color}"></span>
+        <div><div class="d-date">${day.date}</div><div class="d-title">${day.title}</div></div>
+        <span class="chev">▶</span>
+      </div>
+      <div class="day-body">`;
+    day.spots.forEach((s, si) => {
+      html += `<div class="spot" onclick="flyTo(${s.c[0]},${s.c[1]})">
+        <span class="s-num" style="background:${color}">${si+1}</span>
+        <div>
+          <div class="s-name">${s.n}</div>
+          <div class="s-desc">${s.d}</div>
+          ${s.m ? '<div class="s-meta">💴 ' + s.m + '</div>' : ''}
+        </div>
+      </div>`;
+    });
+    html += `<div class="stay">🛏 ${day.stay}</div></div></div>`;
+  });
+  html += `<div class="hint">💡 点击日期标题可在地图高亮当天行程 · 点击箭头可折叠</div>`;
+  sb.innerHTML = html;
+}
+
+function onDayHeadClick(event, dayIndex) {
+  if (event.target.classList.contains('chev')) {
+    toggleDay(dayIndex);
+    return;
+  }
+  highlightDay(dayIndex);
+}
+
+function toggleDay(di){
+  document.querySelector(`.day[data-day="${di}"]`).classList.toggle('open');
+}
+
+function flyTo(lat,lng){
+  map.setZoomAndCenter(14, [lng, lat], true, 800);
+}
+
+initMap();
+renderDayTabs(plan);
+renderSidebar(plan);
+renderMap(plan);
 </script>
+</body>
+</html>

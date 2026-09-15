@@ -12,7 +12,8 @@
     --line: #e6e9ef; --accent: #d7263d; --accent-bright: #f46036; --accent2: #2b6de0;
   }
   body { font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    background: var(--bg); color: var(--ink); height: 100vh; overflow: hidden; }
+    background: var(--bg); color: var(--ink); height: 100vh; overflow: hidden;
+    display: flex; flex-direction: column; }
 
   /* 地图加载动画 */
   #mapLoading {
@@ -33,6 +34,14 @@
   }
   header h1 { font-size: 18px; font-weight: 700; }
   header .meta { font-size: 12.5px; opacity: .92; }
+  .refresh-btn {
+    border: none; background: rgba(255,255,255,.2); color: #fff;
+    width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+    display: grid; place-items: center; font-size: 18px;
+    transition: all .2s; flex-shrink: 0;
+  }
+  .refresh-btn:hover { background: rgba(255,255,255,.35); transform: rotate(90deg); }
+  .refresh-btn:active { transform: rotate(180deg); }
   .switch { display: flex; background: rgba(255,255,255,.18); border-radius: 10px; padding: 4px; }
   .switch button {
     border: none; background: transparent; color: #fff; padding: 8px 16px;
@@ -41,17 +50,22 @@
   }
   .switch button.active { background: #fff; color: var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,.15); }
 
-  /* 日期按钮组 */
+  /* 日期页签 · 固定在底部，横向滑动 */
   .day-tabs {
-    background: #fff; border-bottom: 1px solid var(--line);
-    padding: 12px 18px; display: flex; gap: 8px; overflow-x: auto; flex-wrap: wrap;
+    flex: none; background: #fff; border-top: 1px solid var(--line);
+    padding: 10px 14px; display: flex; gap: 8px;
+    overflow-x: auto; overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; scroll-snap-type: x proximity;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.06);
+    /* 避开 iPhone 底部小黑条 */
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
   }
-  .day-tabs::-webkit-scrollbar { height: 4px; }
-  .day-tabs::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+  .day-tabs::-webkit-scrollbar { height: 0; }
   .day-tab {
+    flex: none; scroll-snap-align: center;
     border: 1.5px solid var(--line); background: #fff; color: var(--ink);
-    padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: all .2s;
-    font-size: 12.5px; white-space: nowrap; display: flex; align-items: center; gap: 6px;
+    padding: 9px 15px; border-radius: 20px; cursor: pointer; transition: all .2s;
+    font-size: 13px; white-space: nowrap; display: flex; align-items: center; gap: 6px;
     font-weight: 500;
   }
   .day-tab:hover { border-color: var(--accent); background: #fef9fa; }
@@ -59,13 +73,26 @@
     background: var(--accent); color: #fff; border-color: var(--accent);
     box-shadow: 0 2px 8px rgba(215, 38, 61, 0.3); font-weight: 600;
   }
-  .day-tab-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .day-tab.active .day-tab-dot { background: rgba(255,255,255,0.4) !important; }
+  .day-tab-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .day-tab.active .day-tab-dot { background: rgba(255,255,255,0.5) !important; }
 
-  .layout { display: flex; height: calc(100vh - 58px - 52px); }
-  .sidebar { width: 420px; min-width: 420px; background: var(--panel);
-    border-right: 1px solid var(--line); overflow-y: auto; padding: 18px 20px 40px; }
-  #map { flex: 1; height: 100%; }
+  /* 主体：上行程 / 下地图 */
+  .layout { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+  /* 行程区：只显示当前选中的一天 */
+  .plan-rail {
+    flex: none; height: 46%; background: var(--panel);
+    overflow-y: auto; padding: 14px 18px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .plan-page {
+    display: none;
+  }
+  .plan-page.active {
+    display: block;
+  }
+
+  #map { flex: 1; min-height: 0; }
 
   .plan-head { padding: 6px 2px 16px; border-bottom: 2px solid var(--line); margin-bottom: 14px; }
   .plan-head h2 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
@@ -81,20 +108,18 @@
   .info-section p { font-size: 12.5px; color: var(--sub); line-height: 1.7; margin-bottom: 6px; }
   .info-section strong { color: var(--ink); font-weight: 600; }
 
-  .day { border: 1px solid var(--line); border-radius: 12px; margin-bottom: 12px; overflow: hidden;
-    transition: box-shadow .2s; }
-  .day:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); }
-  .day-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer;
-    background: #fbfbfd; transition: background .2s; }
-  .day-head:hover { background: #f5f6f8; }
-  .day-head:active { background: #eef0f3; }
-  .day-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-  .day-head .d-date { font-size: 12.5px; color: var(--sub); }
-  .day-head .d-title { font-size: 15px; font-weight: 700; margin-top: 2px; }
-  .day-head .chev { margin-left: auto; color: var(--sub); font-size: 12px; transition: .2s; }
-  .day.open .chev { transform: rotate(90deg); }
-  .day-body { display: none; padding: 4px 14px 14px; }
-  .day.open .day-body { display: block; }
+  /* 每天的标题区 */
+  .page-head {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding-bottom: 11px; margin-bottom: 4px; border-bottom: 2px solid var(--line);
+  }
+  .page-head .d-dot { width: 11px; height: 11px; border-radius: 50%; flex: none; margin-top: 5px; }
+  .page-head .d-date { font-size: 12.5px; color: var(--sub); }
+  .page-head .d-title { font-size: 16.5px; font-weight: 700; margin-top: 2px; line-height: 1.3; }
+  .page-head .d-count {
+    margin-left: auto; flex: none; font-size: 11px; color: var(--sub);
+    background: var(--bg); border-radius: 12px; padding: 3px 9px; margin-top: 3px;
+  }
 
   .spot { display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid #f2f3f6; cursor: pointer; }
   .spot:first-child { border-top: none; }
@@ -110,42 +135,17 @@
   .hint { font-size: 11.5px; color: var(--sub); text-align: center; padding: 10px; }
 
   /* 地图浮动面板 */
-  .map-day-panel {
-    position: absolute; top: 20px; right: 20px; width: 340px; max-height: calc(100vh - 160px);
-    background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
-    border-radius: 14px; box-shadow: 0 8px 32px rgba(0,0,0,.18);
-    padding: 20px; overflow-y: auto; z-index: 999;
-    display: none; animation: slideIn .3s ease;
-  }
-  .map-day-panel.active { display: block; }
-  @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-  .panel-close { position: absolute; top: 16px; right: 16px; width: 26px; height: 26px;
-    border-radius: 50%; background: #f0f1f3; cursor: pointer; display: flex;
-    align-items: center; justify-content: center; font-size: 18px; color: #6b7686; transition: .2s; }
-  .panel-close:hover { background: #e6e9ef; transform: rotate(90deg); }
-  .panel-head { padding-right: 34px; margin-bottom: 16px; border-bottom: 2px solid var(--line); padding-bottom: 14px; }
-  .panel-head .p-date { font-size: 12.5px; color: var(--sub); }
-  .panel-head .p-title { font-size: 17px; font-weight: 700; margin-top: 6px; }
-  .panel-spot { display: flex; gap: 12px; padding: 11px 0; border-top: 1px solid #f5f6f8; }
-  .panel-spot:first-child { border-top: none; }
-  .panel-spot .ps-num { width: 26px; height: 26px; border-radius: 50%; color: #fff;
-    display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700; flex-shrink: 0; }
-  .panel-spot .ps-name { font-size: 14.5px; font-weight: 600; margin-bottom: 6px; }
-  .panel-spot .ps-desc { font-size: 12.5px; color: var(--sub); line-height: 1.6; }
-  .panel-spot .ps-meta { font-size: 11px; color: #8b6914; background: #fffbf0; padding: 3px 7px;
-    border-radius: 5px; margin-top: 5px; display: inline-block; border: 1px solid #f7e9c8; }
-  .panel-stay { font-size: 12px; color: #b3792b; background: #fff6e6;
-    padding: 10px 14px; border-radius: 8px; margin-top: 14px; font-weight: 500; }
 
-  /* 标记动画 */
-  @keyframes markerPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-  }
-  .marker-highlight {
-    animation: markerPulse 0.6s ease-in-out 2;
+  /* 移动端优化 */
+  @media (max-width: 600px) {
+    header h1 { font-size: 16px; }
+    header .meta { font-size: 11.5px; }
+    .plan-rail { height: 50%; }
+    .page-head .d-title { font-size: 15px; }
+    .s-name { font-size: 13.5px; }
   }
 
+  /* 标记样式 - 水滴形 */
   .num-icon { background: transparent; border: none; }
   .num-icon div { width: 26px; height: 26px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
     display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:12.5px;
@@ -157,69 +157,6 @@
     box-shadow: 0 4px 16px rgba(0,0,0,.45);
   }
   .amap-icon-content { width: 34px; height: 34px; }
-
-  /* 移动端视图切换 */
-  .view-toggle {
-    display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
-    background: #fff; border-top: 1px solid var(--line); padding: 8px 12px;
-    box-shadow: 0 -2px 12px rgba(0,0,0,.08);
-  }
-  .view-toggle-btns {
-    display: flex; gap: 8px; max-width: 500px; margin: 0 auto;
-  }
-  .view-toggle-btns button {
-    flex: 1; border: 1.5px solid var(--line); background: #fff; color: var(--ink);
-    padding: 11px 16px; border-radius: 10px; font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: all .2s; display: flex; align-items: center;
-    justify-content: center; gap: 6px;
-  }
-  .view-toggle-btns button.active {
-    background: var(--accent); color: #fff; border-color: var(--accent);
-  }
-
-  /* 移动端底部抽屉面板 */
-  .mobile-drawer {
-    display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
-    background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,.15);
-    max-height: 65vh; overflow-y: auto; transform: translateY(100%);
-    transition: transform .3s ease;
-  }
-  .mobile-drawer.active { transform: translateY(0); }
-  .drawer-handle {
-    width: 40px; height: 4px; background: #ddd; border-radius: 2px;
-    margin: 12px auto 16px; cursor: pointer;
-  }
-  .drawer-content { padding: 0 18px 24px; }
-
-  @media (max-width: 1100px) { .map-day-panel { width: 300px; right: 12px; top: 12px; } }
-  @media (max-width: 800px) {
-    header { padding: 12px 16px; }
-    header h1 { font-size: 16px; }
-    header .meta { font-size: 11.5px; }
-
-    .day-tabs { padding: 10px 14px; gap: 6px; }
-    .day-tab { padding: 7px 11px; font-size: 11.5px; }
-
-    .layout { flex-direction: column; height: calc(100vh - 58px - 48px - 56px); }
-    .sidebar { width: 100%; min-width: 0; height: 100%; border-right: none; padding: 14px 16px 20px; }
-    .sidebar.hide { display: none; }
-
-    #map { height: 100%; }
-    #map.hide { display: none; }
-
-    .map-day-panel { display: none !important; }
-    .view-toggle { display: block; }
-    .mobile-drawer { display: block; }
-
-    .plan-head h2 { font-size: 16px; }
-    .info-section { padding: 12px 14px; font-size: 12.5px; }
-    .day-head { padding: 11px 0; }
-    .d-date { font-size: 12.5px; }
-    .d-title { font-size: 14px; }
-    .spot { padding: 10px 0; }
-    .s-name { font-size: 13.5px; }
-    .s-desc { font-size: 12px; }
-  }
 </style>
 </head>
 <body>
@@ -228,32 +165,17 @@
     <h1>🇯🇵 国庆日本旅行规划 · 京都 & 大阪</h1>
     <div class="meta">10/3 下午4-5点抵达 · 10/8 下午1-3点飞香港 · 5 晚 6 天 · 关西机场 (KIX)</div>
   </div>
+  <button class="refresh-btn" onclick="location.reload(true)" title="强制刷新页面">🔄</button>
 </header>
 
-<div class="day-tabs" id="dayTabs"></div>
-
 <div class="layout">
-  <div class="sidebar" id="sidebar"></div>
-  <div id="map" class="hide" style="position: relative;">
+  <div class="plan-rail" id="planRail"></div>
+  <div id="map" style="position: relative;">
     <div id="mapLoading">加载地图中...</div>
-    <div class="map-day-panel" id="mapPanel">
-      <div class="panel-close" onclick="closeDayPanel()">×</div>
-      <div id="panelContent"></div>
-    </div>
   </div>
 </div>
 
-<div class="mobile-drawer" id="mobileDrawer">
-  <div class="drawer-handle" onclick="closeMobileDrawer()"></div>
-  <div class="drawer-content" id="drawerContent"></div>
-</div>
-
-<div class="view-toggle">
-  <div class="view-toggle-btns">
-    <button id="btnList" class="active" onclick="switchView('list')">📋 行程列表</button>
-    <button id="btnMap" onclick="switchView('map')">🗺️ 地图视图</button>
-  </div>
-</div>
+<div class="day-tabs" id="dayTabs"></div>
 
 <script>
 const DAY_COLORS = ['#d7263d','#f46036','#e6a817','#2ca05a','#2b6de0','#7d4fd0'];
@@ -350,7 +272,6 @@ function renderMap(p){
   allMarkers = [];
   polylines = [];
   markersByDay = [];
-  currentHighlightDay = null;
 
   const allPts = [];
   p.days.forEach((day, di) => {
@@ -372,7 +293,7 @@ function renderMap(p){
       });
 
       const infoWindow = new AMap.InfoWindow({
-        content: `<div class="amap-info-content"><b>${day.date} · 第${di+1}天</b><b>${s.n}</b>${s.d}${s.m ? '<br><span style="color:#8b6914;font-size:11.5px">💴 ' + s.m + '</span>' : ''}</div>`,
+        content: `<div style="padding:8px 10px"><b style="display:block;margin-bottom:6px">${day.date} · 第${di+1}天</b><b style="display:block;margin-bottom:4px">${s.n}</b><div style="font-size:12.5px;color:#555;line-height:1.6">${s.d}</div>${s.m ? '<div style="color:#8b6914;font-size:11.5px;margin-top:6px">💴 ' + s.m + '</div>' : ''}</div>`,
         offset: new AMap.Pixel(0, -26)
       });
 
@@ -391,8 +312,8 @@ function renderMap(p){
         strokeWeight: 3,
         strokeOpacity: 0.65,
         strokeStyle: 'dashed',
-        showDir: true,  // 显示方向箭头
-        dirColor: color,  // 箭头颜色
+        showDir: true,
+        dirColor: color,
         map: map,
         extData: { dayIndex: di }
       });
@@ -400,23 +321,15 @@ function renderMap(p){
     }
   });
 
-  // 手机上地图初始隐藏，此时 setFitView 算不出可视范围，留给 switchView 处理
-  if (allPts.length > 0 && !(isMobile() && currentView === 'list')) {
+  if (allPts.length > 0) {
     map.setFitView(allMarkers, false, [80, 80, 80, 80]);
   }
 }
 
 function highlightDay(dayIndex) {
-  if (dayIndex === currentHighlightDay) {
-    showAllDays();
-    return;
-  }
-
   currentHighlightDay = dayIndex;
   const day = plan.days[dayIndex];
   const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
-
-  setActiveTab(dayIndex);
 
   markersByDay.forEach((dayMarkers, di) => {
     const isHighlighted = di === dayIndex;
@@ -437,233 +350,114 @@ function highlightDay(dayIndex) {
     }
   });
 
-  if (isMobile()) {
-    // 手机上用底部抽屉，并切到地图才能看到高亮
-    showMobileDrawer(day, dayIndex, color);
-    if (currentView === 'list') switchView('map');
-  } else {
-    showDayPanel(day, dayIndex, color);
-  }
-
   const dayMarkers = markersByDay[dayIndex].map(m => m.marker);
   if (dayMarkers.length > 0) {
-    map.setFitView(dayMarkers, false, isMobile() ? [50, 50, 50, 50] : [100, 100, 100, 100]);
+    map.setFitView(dayMarkers, false, [100, 100, 100, 100]);
   }
 }
 
-function resetHighlight() {
-  currentHighlightDay = null;
-
-  markersByDay.forEach((dayMarkers, di) => {
-    const color = DAY_COLORS[di % DAY_COLORS.length];
-    dayMarkers.forEach(({marker}, si) => {
-      marker.setContent(createMarkerIcon(si+1, color, false, false));
-    });
-  });
-
-  polylines.forEach((polyline) => {
-    const di = polyline.getExtData().dayIndex;
-    const color = DAY_COLORS[di % DAY_COLORS.length];
-    polyline.setOptions({ strokeColor: color, strokeWeight: 3, strokeOpacity: 0.65, showDir: true, dirColor: color });
-  });
-
-  if (allMarkers.length > 0) {
-    map.setFitView(allMarkers, false, [80, 80, 80, 80]);
-  }
-}
-
-function showDayPanel(day, dayIndex, color) {
-  const panel = document.getElementById('mapPanel');
-  const content = document.getElementById('panelContent');
-
-  let html = `<div class="panel-head">
-    <div class="p-date">${day.date}</div>
-    <div class="p-title">${day.title}</div>
-  </div>`;
-
-  day.spots.forEach((s, si) => {
-    html += `<div class="panel-spot" onclick="flyTo(${s.c[0]},${s.c[1]})">
-      <span class="ps-num" style="background:${color}">${si+1}</span>
-      <div>
-        <div class="ps-name">${s.n}</div>
-        <div class="ps-desc">${s.d}</div>
-        ${s.m ? '<div class="ps-meta">💴 ' + s.m + '</div>' : ''}
-      </div>
-    </div>`;
-  });
-
-  html += `<div class="panel-stay">🛏 ${day.stay}</div>`;
-
-  content.innerHTML = html;
-  panel.classList.add('active');
-}
-
-function closeDayPanel() {
-  document.getElementById('mapPanel').classList.remove('active');
-}
-
-function showAllDays(){
-  resetHighlight();
-  closeDayPanel();
-  closeMobileDrawer();
-  setActiveTab('all');
-}
-
-function renderDayTabs(p){
+// 渲染日期页签
+function renderDayTabs(p) {
   const tabs = document.getElementById('dayTabs');
-  let html = `<div class="day-tab" data-tab="all" onclick="showAllDays()">🗾 全部行程</div>`;
-  p.days.forEach((day, di) => {
-    const color = DAY_COLORS[di % DAY_COLORS.length];
-    // 提取住宿地点简称
-    let stayCity = '';
-    if (day.stay.includes('七条')) stayCity = '住七条';
-    else if (day.stay.includes('京都')) stayCity = '住京都';
-    else if (day.stay.includes('大阪') || day.stay.includes('难波')) stayCity = '住大阪';
-    else if (day.stay.includes('飞香港') || day.stay.includes('返程') || day.stay.includes('起飞')) stayCity = '返程日';
-
-    html += `<div class="day-tab" data-tab="${di}" onclick="highlightDay(${di})">
-      <span class="day-tab-dot" style="background:${color}"></span>${day.date.split(' ')[0]} 第${di+1}天${stayCity ? ' · ' + stayCity : ''}
+  tabs.innerHTML = p.days.map((day, i) => {
+    const color = DAY_COLORS[i % DAY_COLORS.length];
+    const label = day.date.split(' ')[0]; // "10/3"
+    return `<div class="day-tab" data-day="${i}" onclick="selectDay(${i})">
+      <span class="day-tab-dot" style="background:${color}"></span>${label}
     </div>`;
-  });
-  tabs.innerHTML = html;
-  setActiveTab('all');
+  }).join('');
 }
 
-function setActiveTab(tabKey){
-  document.querySelectorAll('.day-tab').forEach(t => {
-    t.classList.toggle('active', t.getAttribute('data-tab') === String(tabKey));
-  });
-}
-
-function renderSidebar(p){
-  const sb = document.getElementById('sidebar');
-  let html = `<div class="plan-head"><h2>${p.name}</h2>
-    <p>✈️ 进出机场：${p.airport}</p>
-    <p>${p.intro}</p>
-    <div>${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>`;
-
-  html += `<div class="info-section">
-    <h3>💡 实用信息</h3>
-    <p>${p.budget}</p>
-    <p>${p.transport}</p>
-    <p>${p.emergency}</p>
-  </div>`;
-
-  p.days.forEach((day, di) => {
+// 渲染行程轨道
+function renderPlanRail(p) {
+  const rail = document.getElementById('planRail');
+  rail.innerHTML = p.days.map((day, di) => {
     const color = DAY_COLORS[di % DAY_COLORS.length];
-    html += `<div class="day open" data-day="${di}">
-      <div class="day-head" onclick="onDayHeadClick(event, ${di})">
-        <span class="day-dot" style="background:${color}"></span>
-        <div><div class="d-date">${day.date}</div><div class="d-title">${day.title}</div></div>
-        <span class="chev">▶</span>
+    let html = `<div class="plan-page" data-day="${di}">`;
+
+    // 每天的头部
+    html += `<div class="page-head">
+      <span class="d-dot" style="background:${color}"></span>
+      <div style="flex:1">
+        <div class="d-date">${day.date}</div>
+        <div class="d-title">${day.title}</div>
       </div>
-      <div class="day-body">`;
+      <div class="d-count">${day.spots.length} 站</div>
+    </div>`;
+
+    // 景点列表
     day.spots.forEach((s, si) => {
-      html += `<div class="spot" onclick="flyTo(${s.c[0]},${s.c[1]})">
-        <span class="s-num" style="background:${color}">${si+1}</span>
-        <div>
+      html += `<div class="spot" onclick="flyToSpot(${di}, ${si})">
+        <div class="s-num" style="background:${color}">${si+1}</div>
+        <div style="flex:1">
           <div class="s-name">${s.n}</div>
           <div class="s-desc">${s.d}</div>
-          ${s.m ? '<div class="s-meta">💴 ' + s.m + '</div>' : ''}
+          ${s.m ? `<div class="s-meta">💴 ${s.m}</div>` : ''}
         </div>
       </div>`;
     });
-    html += `<div class="stay">🛏 ${day.stay}</div></div></div>`;
-  });
-  html += `<div class="hint">💡 点击日期标题可在地图高亮当天行程 · 点击箭头可折叠</div>`;
-  sb.innerHTML = html;
+
+    html += `</div>`;
+    return html;
+  }).join('');
 }
 
-function onDayHeadClick(event, dayIndex) {
-  if (event.target.classList.contains('chev')) {
-    toggleDay(dayIndex);
-    return;
+let currentDay = null;
+
+// 选中某一天（从页签点击）
+function selectDay(dayIndex) {
+  currentDay = dayIndex;
+
+  // 更新页签高亮
+  document.querySelectorAll('.day-tab').forEach((tab, i) => {
+    tab.classList.toggle('active', i === dayIndex);
+  });
+
+  // 显示对应天的行程
+  document.querySelectorAll('.plan-page').forEach((page, i) => {
+    page.classList.toggle('active', i === dayIndex);
+  });
+
+  // 页签自动滚到可见位置
+  const activeTab = document.querySelector('.day-tab.active');
+  if (activeTab) {
+    activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   }
+
+  // 高亮地图
   highlightDay(dayIndex);
 }
 
-function toggleDay(di){
-  document.querySelector(`.day[data-day="${di}"]`).classList.toggle('open');
+// 点击景点飞到地图位置
+function flyToSpot(dayIndex, spotIndex) {
+  const spot = plan.days[dayIndex].spots[spotIndex];
+  const pos = [spot.c[1], spot.c[0]];
+  map.setZoomAndCenter(14, pos, false, 300);
+
+  // 短暂高亮这个标记
+  const marker = markersByDay[dayIndex][spotIndex].marker;
+  const originalContent = marker.getContent();
+  const color = DAY_COLORS[dayIndex % DAY_COLORS.length];
+  marker.setContent(createMarkerIcon(spotIndex+1, color, true, false));
+  setTimeout(() => {
+    if (currentHighlightDay === dayIndex) {
+      marker.setContent(createMarkerIcon(spotIndex+1, color, true, false));
+    } else {
+      marker.setContent(originalContent);
+    }
+  }, 1200);
 }
 
-function flyTo(lat,lng){
-  map.setZoomAndCenter(14, [lng, lat], true, 800);
-  // 手机上点景点自动切到地图，否则看不到跳转结果
-  if (isMobile() && currentView === 'list') switchView('map');
-}
-
-// ---- 移动端视图切换 ----
-let currentView = 'list';
-
-function isMobile(){ return window.innerWidth <= 800; }
-
-function switchView(view){
-  currentView = view;
-  const sidebar = document.getElementById('sidebar');
-  const mapEl = document.getElementById('map');
-
-  sidebar.classList.toggle('hide', view === 'map');
-  mapEl.classList.toggle('hide', view === 'list');
-  document.getElementById('btnList').classList.toggle('active', view === 'list');
-  document.getElementById('btnMap').classList.toggle('active', view === 'map');
-
-  if (view === 'map') {
-    // 地图在隐藏状态下初始化会尺寸错乱，切回来要重算
-    setTimeout(() => {
-      map.resize();
-      const target = currentHighlightDay !== null
-        ? markersByDay[currentHighlightDay].map(m => m.marker)
-        : allMarkers;
-      if (target.length) map.setFitView(target, false, [60, 60, 60, 60]);
-    }, 60);
-  } else {
-    closeMobileDrawer();
-  }
-}
-
-function showMobileDrawer(day, dayIndex, color){
-  const content = document.getElementById('drawerContent');
-  let html = `<div class="panel-head">
-    <div class="p-date">${day.date}</div>
-    <div class="p-title">${day.title}</div>
-  </div>`;
-
-  day.spots.forEach((s, si) => {
-    html += `<div class="panel-spot" onclick="flyTo(${s.c[0]},${s.c[1]})">
-      <span class="ps-num" style="background:${color}">${si+1}</span>
-      <div>
-        <div class="ps-name">${s.n}</div>
-        <div class="ps-desc">${s.d}</div>
-        ${s.m ? '<div class="ps-meta">💴 ' + s.m + '</div>' : ''}
-      </div>
-    </div>`;
-  });
-
-  html += `<div class="panel-stay">🛏 ${day.stay}</div>`;
-  content.innerHTML = html;
-  document.getElementById('mobileDrawer').classList.add('active');
-}
-
-function closeMobileDrawer(){
-  document.getElementById('mobileDrawer').classList.remove('active');
-}
-
-// 转屏时重置到桌面布局，避免留下 hide 状态
+// 转屏时重新触发地图大小
 window.addEventListener('resize', () => {
-  if (!isMobile()) {
-    document.getElementById('sidebar').classList.remove('hide');
-    document.getElementById('map').classList.remove('hide');
-    closeMobileDrawer();
-    if (map) map.resize();
-  } else if (currentView === 'map') {
-    document.getElementById('sidebar').classList.add('hide');
-  }
+  if (map) map.resize();
 });
 
 initMap();
 renderDayTabs(plan);
-renderSidebar(plan);
+renderPlanRail(plan);
 renderMap(plan);
+selectDay(0); // 默认第一天
 </script>
 </body>
 </html>

@@ -158,12 +158,67 @@
   }
   .amap-icon-content { width: 34px; height: 34px; }
 
+  /* 移动端视图切换 */
+  .view-toggle {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+    background: #fff; border-top: 1px solid var(--line); padding: 8px 12px;
+    box-shadow: 0 -2px 12px rgba(0,0,0,.08);
+  }
+  .view-toggle-btns {
+    display: flex; gap: 8px; max-width: 500px; margin: 0 auto;
+  }
+  .view-toggle-btns button {
+    flex: 1; border: 1.5px solid var(--line); background: #fff; color: var(--ink);
+    padding: 11px 16px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all .2s; display: flex; align-items: center;
+    justify-content: center; gap: 6px;
+  }
+  .view-toggle-btns button.active {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+
+  /* 移动端底部抽屉面板 */
+  .mobile-drawer {
+    display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
+    background: #fff; border-radius: 16px 16px 0 0; box-shadow: 0 -4px 20px rgba(0,0,0,.15);
+    max-height: 65vh; overflow-y: auto; transform: translateY(100%);
+    transition: transform .3s ease;
+  }
+  .mobile-drawer.active { transform: translateY(0); }
+  .drawer-handle {
+    width: 40px; height: 4px; background: #ddd; border-radius: 2px;
+    margin: 12px auto 16px; cursor: pointer;
+  }
+  .drawer-content { padding: 0 18px 24px; }
+
   @media (max-width: 1100px) { .map-day-panel { width: 300px; right: 12px; top: 12px; } }
   @media (max-width: 800px) {
-    .layout{ flex-direction: column; }
-    .sidebar{ width:100%; min-width:0; height: 50%; }
-    #map{ height:50%; }
+    header { padding: 12px 16px; }
+    header h1 { font-size: 16px; }
+    header .meta { font-size: 11.5px; }
+
+    .day-tabs { padding: 10px 14px; gap: 6px; }
+    .day-tab { padding: 7px 11px; font-size: 11.5px; }
+
+    .layout { flex-direction: column; height: calc(100vh - 58px - 48px - 56px); }
+    .sidebar { width: 100%; min-width: 0; height: 100%; border-right: none; padding: 14px 16px 20px; }
+    .sidebar.hide { display: none; }
+
+    #map { height: 100%; }
+    #map.hide { display: none; }
+
     .map-day-panel { display: none !important; }
+    .view-toggle { display: block; }
+    .mobile-drawer { display: block; }
+
+    .plan-head h2 { font-size: 16px; }
+    .info-section { padding: 12px 14px; font-size: 12.5px; }
+    .day-head { padding: 11px 0; }
+    .d-date { font-size: 12.5px; }
+    .d-title { font-size: 14px; }
+    .spot { padding: 10px 0; }
+    .s-name { font-size: 13.5px; }
+    .s-desc { font-size: 12px; }
   }
 </style>
 </head>
@@ -179,12 +234,24 @@
 
 <div class="layout">
   <div class="sidebar" id="sidebar"></div>
-  <div id="map" style="position: relative;">
+  <div id="map" class="hide" style="position: relative;">
     <div id="mapLoading">加载地图中...</div>
     <div class="map-day-panel" id="mapPanel">
       <div class="panel-close" onclick="closeDayPanel()">×</div>
       <div id="panelContent"></div>
     </div>
+  </div>
+</div>
+
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-handle" onclick="closeMobileDrawer()"></div>
+  <div class="drawer-content" id="drawerContent"></div>
+</div>
+
+<div class="view-toggle">
+  <div class="view-toggle-btns">
+    <button id="btnList" class="active" onclick="switchView('list')">📋 行程列表</button>
+    <button id="btnMap" onclick="switchView('map')">🗺️ 地图视图</button>
   </div>
 </div>
 
@@ -331,7 +398,8 @@ function renderMap(p){
     }
   });
 
-  if (allPts.length > 0) {
+  // 手机上地图初始隐藏，此时 setFitView 算不出可视范围，留给 switchView 处理
+  if (allPts.length > 0 && !(isMobile() && currentView === 'list')) {
     map.setFitView(allMarkers, false, [80, 80, 80, 80]);
   }
 }
@@ -367,11 +435,17 @@ function highlightDay(dayIndex) {
     }
   });
 
-  showDayPanel(day, dayIndex, color);
+  if (isMobile()) {
+    // 手机上用底部抽屉，并切到地图才能看到高亮
+    showMobileDrawer(day, dayIndex, color);
+    if (currentView === 'list') switchView('map');
+  } else {
+    showDayPanel(day, dayIndex, color);
+  }
 
   const dayMarkers = markersByDay[dayIndex].map(m => m.marker);
   if (dayMarkers.length > 0) {
-    map.setFitView(dayMarkers, false, [100, 100, 100, 100]);
+    map.setFitView(dayMarkers, false, isMobile() ? [50, 50, 50, 50] : [100, 100, 100, 100]);
   }
 }
 
@@ -429,6 +503,7 @@ function closeDayPanel() {
 function showAllDays(){
   resetHighlight();
   closeDayPanel();
+  closeMobileDrawer();
   setActiveTab('all');
 }
 
@@ -514,7 +589,77 @@ function toggleDay(di){
 
 function flyTo(lat,lng){
   map.setZoomAndCenter(14, [lng, lat], true, 800);
+  // 手机上点景点自动切到地图，否则看不到跳转结果
+  if (isMobile() && currentView === 'list') switchView('map');
 }
+
+// ---- 移动端视图切换 ----
+let currentView = 'list';
+
+function isMobile(){ return window.innerWidth <= 800; }
+
+function switchView(view){
+  currentView = view;
+  const sidebar = document.getElementById('sidebar');
+  const mapEl = document.getElementById('map');
+
+  sidebar.classList.toggle('hide', view === 'map');
+  mapEl.classList.toggle('hide', view === 'list');
+  document.getElementById('btnList').classList.toggle('active', view === 'list');
+  document.getElementById('btnMap').classList.toggle('active', view === 'map');
+
+  if (view === 'map') {
+    // 地图在隐藏状态下初始化会尺寸错乱，切回来要重算
+    setTimeout(() => {
+      map.resize();
+      const target = currentHighlightDay !== null
+        ? markersByDay[currentHighlightDay].map(m => m.marker)
+        : allMarkers;
+      if (target.length) map.setFitView(target, false, [60, 60, 60, 60]);
+    }, 60);
+  } else {
+    closeMobileDrawer();
+  }
+}
+
+function showMobileDrawer(day, dayIndex, color){
+  const content = document.getElementById('drawerContent');
+  let html = `<div class="panel-head">
+    <div class="p-date">${day.date}</div>
+    <div class="p-title">${day.title}</div>
+  </div>`;
+
+  day.spots.forEach((s, si) => {
+    html += `<div class="panel-spot" onclick="flyTo(${s.c[0]},${s.c[1]})">
+      <span class="ps-num" style="background:${color}">${si+1}</span>
+      <div>
+        <div class="ps-name">${s.n}</div>
+        <div class="ps-desc">${s.d}</div>
+        ${s.m ? '<div class="ps-meta">💴 ' + s.m + '</div>' : ''}
+      </div>
+    </div>`;
+  });
+
+  html += `<div class="panel-stay">🛏 ${day.stay}</div>`;
+  content.innerHTML = html;
+  document.getElementById('mobileDrawer').classList.add('active');
+}
+
+function closeMobileDrawer(){
+  document.getElementById('mobileDrawer').classList.remove('active');
+}
+
+// 转屏时重置到桌面布局，避免留下 hide 状态
+window.addEventListener('resize', () => {
+  if (!isMobile()) {
+    document.getElementById('sidebar').classList.remove('hide');
+    document.getElementById('map').classList.remove('hide');
+    closeMobileDrawer();
+    if (map) map.resize();
+  } else if (currentView === 'map') {
+    document.getElementById('sidebar').classList.add('hide');
+  }
+});
 
 initMap();
 renderDayTabs(plan);

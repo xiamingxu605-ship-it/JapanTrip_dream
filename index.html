@@ -83,6 +83,22 @@ a{color:inherit}
 .mapcard p{margin:4px 0 10px; font-size:12.5px; color:var(--muted)}
 .mapcard svg{display:block; width:100%; height:auto; max-width:100%}
 .mapcard text{font-family:var(--sign); font-weight:600}
+/* real map replaces the schematic once the SDK is up */
+#amap{width:100%; height:min(56vh,380px); border-radius:8px; overflow:hidden; display:none}
+.mapcard.live #amap{display:block}
+.mapcard.live .schematic,.mapcard.live .static-note{display:none}
+.maplegend{display:none; gap:10px 15px; flex-wrap:wrap; margin-top:11px;
+  font-family:var(--sign); font-size:11.5px; color:var(--muted)}
+.mapcard.live .maplegend{display:flex}
+.maplegend span{display:inline-flex; align-items:center; gap:5px}
+.maplegend i{width:9px; height:9px; border-radius:50%; flex:none}
+.pin{width:23px; height:23px; border-radius:50% 50% 50% 0; transform:rotate(-45deg);
+  display:grid; place-items:center; border:2px solid #fff;
+  box-shadow:0 2px 5px rgba(0,0,0,.4);
+  font-family:var(--sign); font-weight:700; font-size:11px; color:#fff}
+.pin b{transform:rotate(45deg)}
+.amap-info-content{font-family:var(--body); font-size:12.5px; line-height:1.5; padding:7px 9px; max-width:190px}
+.amap-info-content b{display:block; margin-bottom:3px; font-size:13px; color:#151d2b}
 /* ---- day block ---- */
 .day{margin-bottom:30px}
 .dayhead{display:flex; align-items:flex-start; gap:12px; margin-bottom:2px}
@@ -219,10 +235,12 @@ a{color:inherit}
   </div>
 </div>
 
-<section class="mapcard">
-  <h2>区域关系图</h2>
-  <p>相对位置示意，非实际比例。数字为标注的行程天数。</p>
-  <svg viewBox="0 0 400 268" role="img" aria-label="关西地区示意图：京都在北，宇治与奈良在东南，大阪在西南，关西机场在最南">
+<section class="mapcard" id="mapcard">
+  <h2>行程地图</h2>
+  <p class="static-note">相对位置示意，非实际比例。数字为标注的行程天数。</p>
+  <div id="amap"></div>
+  <div class="maplegend" id="maplegend"></div>
+  <svg class="schematic" viewBox="0 0 400 268" role="img" aria-label="关西地区示意图：京都在北，宇治与奈良在东南，大阪在西南，关西机场在最南">
     <!-- rails -->
     <g stroke-linecap="round" fill="none" stroke-width="3.5">
       <!-- Kyoto -> Uji -> Nara -->
@@ -291,21 +309,21 @@ a{color:inherit}
   </div>
   <ol class="line">
     <li class="stop"><span class="dot">1</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.4320" data-lng="135.2304">
         <h3>关西国际机场 KIX</h3>
         <p>下午 5–7 点落地。HARUKA 特急直达京都站约 75 分钟，是最省心的一趟；机场巴士约 90 分钟但能到酒店门口。</p>
         <div class="meta"><span class="yen">HARUKA ¥3,430</span>
           <a class="nav" href="https://maps.apple.com/?q=関西国際空港" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">2</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.9859" data-lng="135.7589">
         <h3>京都站 · 拉面小路</h3>
         <p>入住后放行李。京都站伊势丹 10F 拉面小路，博多一幸舍、中村商店都在这层，落地第一餐不用走远。</p>
         <div class="meta"><span class="yen">拉面 ¥1,000</span>
           <a class="nav" href="https://maps.apple.com/?q=京都駅" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">3</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.9875" data-lng="135.7594">
         <h3>京都塔展望台</h3>
         <p>就在京都站对面，还有精力就上去看一眼夜景，十几分钟的事，也算给行程开个场。</p>
         <div class="meta"><span class="yen">展望台 ¥800</span>
@@ -325,28 +343,28 @@ a{color:inherit}
   </div>
   <ol class="line">
     <li class="stop"><span class="dot">1</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.8893" data-lng="135.8076">
         <h3>宇治 · 平等院</h3>
         <p>JR 奈良线约 20 分钟到宇治站。10 円硬币背面就是这座凤凰堂，正面水池的倒影是重点。9:00 前到，人少光也好。</p>
         <div class="meta"><span class="yen">JR ¥240 · 门票 ¥600</span>
           <a class="nav" href="https://maps.apple.com/?q=平等院" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">2</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.8907" data-lng="135.8080">
         <h3>宇治抹茶巡礼</h3>
         <p>中村藤吉本店的生茶果冻和抹茶芭菲、伊藤久右卫门的茶点，沿宇治川走到宇治桥。这站慢慢逛，别赶。</p>
         <div class="meta"><span class="yen">抹茶 ¥1,500</span>
           <a class="nav" href="https://maps.apple.com/?q=中村藤吉本店" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">3</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.9948" data-lng="135.7850">
         <h3>清水寺</h3>
         <p>下午回京都市区。清水舞台俯瞰全城，音羽瀑布三道水各有说法只能选一道。想穿和服在这一带租最合适。</p>
         <div class="meta"><span class="yen">门票 ¥400 · 和服 ¥3,850</span>
           <a class="nav" href="https://maps.apple.com/?q=清水寺" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">4</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="35.0036" data-lng="135.7785">
         <h3>八坂神社 → 鸭川</h3>
         <p>二年坂三年坂快速穿过就好，人多且店铺同质。重点留给鸭川：四条大桥边有台阶可以直接下到河滩，坐在跳石上看日落，比挤石板路舒服得多。</p>
         <div class="meta"><span class="yen">免费</span>
@@ -366,14 +384,14 @@ a{color:inherit}
   </div>
   <ol class="line">
     <li class="stop"><span class="dot">1</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.9671" data-lng="135.7727">
         <h3>伏见稻荷大社</h3>
         <p>千本鸟居，7:00–8:00 到基本没人，是全天唯一能拍到空镜的窗口。爬到山顶来回约 2 小时，只到中途的四辻折返也够看。JR 稻荷站下车即到。</p>
         <div class="meta"><span class="yen">免费 · JR ¥150</span>
           <a class="nav" href="https://maps.apple.com/?q=伏見稲荷大社" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">2</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="35.0170" data-lng="135.6717">
         <h3>岚山 · 竹林与渡月桥</h3>
         <p>嵯峨野竹林小径、渡月桥、天龙寺庭园。午餐这边的汤豆腐比较对得起环境。想坐嵯峨野小火车要提前留出时间。</p>
         <div class="meta"><span class="yen">天龙寺 ¥500 · 午餐 ¥1,800</span>
@@ -383,7 +401,7 @@ a{color:inherit}
   <div class="transfer">京都 → 大阪难波 · JR 或阪急约 45 分钟 · ¥560</div>
   <ol class="line">
     <li class="stop"><span class="dot">3</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.6687" data-lng="135.5013">
         <h3>难波 · 道顿堀</h3>
         <p>入住后出门就是道顿堀。格力高招牌、章鱼烧、一兰拉面，戎桥上晚上永远在拍照。这一晚不用计划，随便走。</p>
         <div class="meta"><span class="yen">晚餐 ¥2,000</span>
@@ -403,28 +421,28 @@ a{color:inherit}
   </div>
   <ol class="line">
     <li class="stop"><span class="dot">1</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.6889" data-lng="135.8398">
         <h3>东大寺</h3>
         <p>近铁难波直达奈良约 45 分钟。世界最大的木造建筑，里面那尊奈良大佛值得站着看一会儿。9 点开门就到最好。</p>
         <div class="meta"><span class="yen">近铁 ¥680 · 门票 ¥600</span>
           <a class="nav" href="https://maps.apple.com/?q=東大寺" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">2</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.6851" data-lng="135.8430">
         <h3>奈良公园</h3>
         <p>一千多头鹿散养在这儿。鹿仙贝 ¥200 一份，拿出来会被围住，举高、快速喂完是诀窍。会鞠躬的鹿真的存在。留 1–1.5 小时。</p>
         <div class="meta"><span class="yen">鹿仙贝 ¥200</span>
           <a class="nav" href="https://maps.apple.com/?q=奈良公園" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">3</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.6799" data-lng="135.8301">
         <h3>奈良町</h3>
         <p>午餐往南走到奈良町，古民家改的餐厅，柿叶寿司和大和茶是本地做法。格子之家可以顺路看看，然后回大阪。</p>
         <div class="meta"><span class="yen">午餐 ¥1,500</span>
           <a class="nav" href="https://maps.apple.com/?q=奈良町" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">4</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.6873" data-lng="135.5259">
         <h3>大阪城</h3>
         <p>傍晚回大阪补这一站。天守阁可以登顶俯瞰，护城河和西之丸庭园在夕阳下比正午好看。天守 17:00 停止入场，赶不上就在园里走走。</p>
         <div class="meta"><span class="yen">天守阁 ¥600</span>
@@ -444,21 +462,21 @@ a{color:inherit}
   </div>
   <ol class="line">
     <li class="stop"><span class="dot">1</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.6654" data-lng="135.4322">
         <h3>USJ 环球影城</h3>
         <p>地铁加 JR 约 30 分钟到 ユニバーサルシティ 站。哈利波特、超级任天堂世界、小黄人。国庆期间热门项目排队 1–2 小时，快速通行券基本是必需品，且要提前在官网买。</p>
         <div class="meta"><span class="yen">门票 ¥8,900 起 · 快票 ¥7,800 起</span>
           <a class="nav" href="https://maps.apple.com/?q=ユニバーサル・スタジオ・ジャパン" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">2</span>
-      <div class="stopcard alt">
+      <div class="stopcard alt" data-lat="34.6546" data-lng="135.4289">
         <h3>海游馆</h3>
         <p>不想排队和坐过山车就换这边。世界级水族馆，中央那缸太平洋鲸鲨是招牌。旁边天保山大摩天轮 ¥1,000，节奏轻松很多。</p>
         <div class="meta"><span class="yen">门票 ¥2,700 · 摩天轮 ¥1,000</span>
           <a class="nav" href="https://maps.apple.com/?q=海遊館" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">3</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.6547" data-lng="135.4283">
         <h3>天保山 · 食街晚餐</h3>
         <p>海游馆旁边的なにわ食いしんぼ横丁，复刻昭和街景的美食街，章鱼烧、串炸、大阪烧都有。玩完就近吃了再回难波。</p>
         <div class="meta"><span class="yen">晚餐 ¥1,500</span>
@@ -478,21 +496,21 @@ a{color:inherit}
   </div>
   <ol class="line">
     <li class="stop"><span class="dot">1</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.6658" data-lng="135.5065">
         <h3>黑门市场</h3>
         <p>大阪的厨房，离难波走路就到。海鲜丼、神户牛串、现烤扇贝、切好的水果，当早餐吃得很饱。8:30 左右店陆续开。</p>
         <div class="meta"><span class="yen">早餐 ¥1,500</span>
           <a class="nav" href="https://maps.apple.com/?q=黒門市場" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">2</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.6723" data-lng="135.5007">
         <h3>心斋桥筋</h3>
         <p>最后的采购主场。松本清、唐吉诃德、BIC CAMERA、优衣库、无印良品全在这条拱廊上，药妆零食电器一次搞定。带好护照退税。10:30 前收工回酒店拿行李。</p>
         <div class="meta"><span class="yen">按清单</span>
           <a class="nav" href="https://maps.apple.com/?q=心斎橋筋商店街" target="_blank" rel="noopener">导航</a></div>
       </div></li>
     <li class="stop"><span class="dot">3</span>
-      <div class="stopcard">
+      <div class="stopcard" data-lat="34.4320" data-lng="135.2304">
         <h3>难波 → 关西机场</h3>
         <p>南海电铁 Rapi:t 特急 38 分钟直达。11:00 出发，11:40 到，12:00 前值机完，离起飞还有两小时。这是把大阪放在最后一晚最大的好处。</p>
         <div class="meta"><span class="yen">Rapi:t ¥1,450</span>
@@ -541,6 +559,80 @@ a{color:inherit}
   </dl>
 </section>
 
-<div class="foot">点任意一站的「导航」可在手机地图中打开 · 行程更新后本页自动刷新</div>
+<div class="foot">点地图上的编号或任意一站的「导航」查看位置 · 行程更新后刷新本页即可</div>
 
 </div>
+
+<script>
+(function(){
+  var KEY='3b4ce8dfafd2272bfe9dbdd2f7be220a';
+  var COLORS=['#0f6fb8','#1f8a5a','#c9433a','#a3761d','#c8622f','#6f4bb5'];
+
+  // Read the itinerary straight out of the DOM so the map can never drift
+  // from the text above it.
+  var days=[].map.call(document.querySelectorAll('.day'),function(sec,i){
+    return {
+      idx:i+1,
+      date:(sec.querySelector('.badge .b2')||{}).textContent||'',
+      title:(sec.querySelector('.dayhead h2')||{}).textContent||'',
+      color:COLORS[i%COLORS.length],
+      stops:[].map.call(sec.querySelectorAll('.stopcard[data-lat]'),function(c,j){
+        return {
+          n:j+1,
+          name:(c.querySelector('h3')||{}).textContent||'',
+          alt:c.classList.contains('alt'),
+          lng:parseFloat(c.dataset.lng),
+          lat:parseFloat(c.dataset.lat)
+        };
+      })
+    };
+  });
+
+  function legend(){
+    document.getElementById('maplegend').innerHTML=days.map(function(d){
+      return '<span><i style="background:'+d.color+'"></i>'+d.date+' 第'+d.idx+'天</span>';
+    }).join('');
+  }
+
+  function draw(){
+    var map=new AMap.Map('amap',{zoom:9,center:[135.62,34.83],viewMode:'2D',
+      mapStyle:'amap://styles/normal',resizeEnable:true});
+    var all=[];
+    days.forEach(function(d){
+      var path=[];
+      d.stops.forEach(function(s){
+        var pos=[s.lng,s.lat];
+        all.push(pos);
+        // Alternatives are not part of that day's actual走法, so they get a
+        // marker but never join the route line.
+        if(!s.alt) path.push(pos);
+        var mk=new AMap.Marker({
+          position:pos, map:map, offset:new AMap.Pixel(-11,-23), zIndex:120,
+          content:'<div class="pin" style="background:'+d.color
+            +(s.alt?';opacity:.55':'')+'"><b>'+s.n+'</b></div>'
+        });
+        var info=new AMap.InfoWindow({
+          offset:new AMap.Pixel(0,-24), closeWhenClickMap:true,
+          content:'<div class="amap-info-content"><b>'+s.name+'</b>'
+            +d.date+' 第'+d.idx+'天 · '+d.title+(s.alt?'（替代方案）':'')+'</div>'
+        });
+        mk.on('click',function(){info.open(map,pos);});
+      });
+      if(path.length>1) new AMap.Polyline({path:path,map:map,strokeColor:d.color,
+        strokeWeight:4,strokeOpacity:.75,strokeStyle:'dashed',showDir:true,lineJoin:'round'});
+    });
+    map.on('complete',function(){
+      document.getElementById('mapcard').classList.add('live');
+      legend();
+      map.setFitView(null,false,[24,24,24,24]);
+    });
+  }
+
+  // Load the SDK after the page is readable; if it fails the schematic stays.
+  var s=document.createElement('script');
+  s.src='https://webapi.amap.com/maps?v=2.0&key='+KEY;
+  s.async=true;
+  s.onload=function(){ if(window.AMap) try{draw();}catch(e){} };
+  document.head.appendChild(s);
+})();
+</script>

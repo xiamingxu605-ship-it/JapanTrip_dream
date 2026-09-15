@@ -1,0 +1,546 @@
+<title>京都大阪六日行程</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+:root{
+  --paper:#eef1f5; --surface:#ffffff; --surface-2:#f7f9fb;
+  --ink:#151d2b; --ink-2:#3c4a60; --muted:#6b7a91;
+  --rule:#dae0e9; --rule-strong:#c3ccd9;
+  --accent:#1b3a63; --chip:#e9eef5; --chip-ink:#3c4a60;
+  --l1:#0f6fb8; --l2:#1f8a5a; --l3:#c9433a; --l4:#a3761d; --l5:#6f4bb5; --l6:#c8622f;
+  --shadow:0 1px 2px rgba(21,29,43,.05), 0 10px 28px rgba(21,29,43,.07);
+  --sign:"Barlow Semi Condensed","Noto Sans SC",system-ui,sans-serif;
+  --body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0d121a; --surface:#151c26; --surface-2:#1a222d;
+    --ink:#e9eef5; --ink-2:#bfc9d7; --muted:#8794a6;
+    --rule:#27313e; --rule-strong:#3b4756;
+    --accent:#8fb6e0; --chip:#1f2833; --chip-ink:#bfc9d7;
+    --l1:#4aa3e8; --l2:#4fbe8a; --l3:#f0776b; --l4:#d8a63f; --l5:#a184e0; --l6:#ee9257;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0d121a; --surface:#151c26; --surface-2:#1a222d;
+  --ink:#e9eef5; --ink-2:#bfc9d7; --muted:#8794a6;
+  --rule:#27313e; --rule-strong:#3b4756;
+  --accent:#8fb6e0; --chip:#1f2833; --chip-ink:#bfc9d7;
+  --l1:#4aa3e8; --l2:#4fbe8a; --l3:#f0776b; --l4:#d8a63f; --l5:#a184e0; --l6:#ee9257;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--body); font-size:15px; line-height:1.65;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:720px; margin:0 auto; padding-block:0 56px; padding-left:18px; padding-right:18px}
+h1,h2,h3{text-wrap:balance; margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--l1); outline-offset:2px; border-radius:3px}
+.eyebrow{
+  font-family:var(--sign); font-weight:600; font-size:12px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
+}
+.num{font-family:var(--sign); font-variant-numeric:tabular-nums}
+/* ---- masthead ---- */
+.masthead{
+  border-bottom:2px solid var(--ink); padding-block:22px 14px; margin-bottom:22px;
+}
+.masthead .kicker{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap}
+.masthead h1{
+  font-family:var(--sign); font-weight:700; font-size:clamp(30px,8.5vw,44px);
+  line-height:1.02; letter-spacing:-.01em; margin-top:8px;
+}
+.masthead h1 .jp{display:block; font-size:.42em; letter-spacing:.24em; color:var(--muted); font-weight:600; margin-top:8px}
+.dates{
+  display:flex; gap:14px; flex-wrap:wrap; margin-top:14px;
+  font-family:var(--sign); font-size:14px; color:var(--ink-2);
+}
+.dates b{font-weight:600; color:var(--ink)}
+/* ---- route strip: KIX -> Kyoto -> Osaka -> KIX ---- */
+.strip{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:0;
+  background:var(--surface); border:1px solid var(--rule); border-radius:10px;
+  box-shadow:var(--shadow); overflow:hidden; margin-bottom:26px;
+}
+.strip div{
+  padding:12px 10px 13px; border-left:1px solid var(--rule); text-align:center;
+}
+.strip div:first-child{border-left:none}
+.strip .p{font-family:var(--sign); font-weight:700; font-size:15px; letter-spacing:.02em}
+.strip .n{font-size:11px; color:var(--muted); margin-top:3px; font-family:var(--sign); letter-spacing:.06em}
+.strip .bar{height:4px; margin-top:9px; border-radius:2px}
+/* ---- schematic map ---- */
+.mapcard{
+  background:var(--surface); border:1px solid var(--rule); border-radius:10px;
+  box-shadow:var(--shadow); padding:16px 14px 10px; margin-bottom:30px;
+}
+.mapcard h2{font-family:var(--sign); font-size:16px; font-weight:700; letter-spacing:.04em}
+.mapcard p{margin:4px 0 10px; font-size:12.5px; color:var(--muted)}
+.mapcard svg{display:block; width:100%; height:auto; max-width:100%}
+.mapcard text{font-family:var(--sign); font-weight:600}
+/* ---- day block ---- */
+.day{margin-bottom:30px}
+.dayhead{display:flex; align-items:flex-start; gap:12px; margin-bottom:2px}
+.badge{
+  flex:none; width:44px; height:44px; border-radius:6px; color:#fff;
+  display:grid; place-items:center; line-height:1;
+  font-family:var(--sign); font-weight:700;
+}
+.badge .b1{font-size:17px}
+.badge .b2{font-size:9.5px; letter-spacing:.1em; opacity:.85; margin-top:2px}
+.dayhead .t{flex:1; min-width:0; padding-top:1px}
+.dayhead h2{font-family:var(--sign); font-size:20px; font-weight:700; letter-spacing:.01em}
+.dayhead .sub{font-size:12.5px; color:var(--muted); margin-top:2px}
+.bed{
+  display:inline-flex; align-items:center; gap:5px; margin-top:7px;
+  background:var(--chip); color:var(--chip-ink); border-radius:20px;
+  padding:3px 11px; font-size:12px; font-family:var(--sign);
+  font-weight:600; letter-spacing:.03em;
+}
+/* ---- stations along a line ---- */
+.line{list-style:none; margin:12px 0 0; padding:0 0 0 6px}
+.stop{position:relative; padding:0 0 4px 30px}
+.stop::before{ /* the line */
+  content:""; position:absolute; left:7px; top:9px; bottom:-4px;
+  width:3px; background:var(--ln); border-radius:2px;
+}
+.stop:last-child::before{bottom:auto; height:12px}
+.dot{
+  position:absolute; left:0; top:6px; width:17px; height:17px; border-radius:50%;
+  background:var(--surface); border:3px solid var(--ln);
+  display:grid; place-items:center;
+  font-family:var(--sign); font-size:9px; font-weight:700; color:var(--ln);
+}
+.stopcard{
+  background:var(--surface); border:1px solid var(--rule); border-radius:9px;
+  padding:11px 13px 12px; margin-bottom:10px; box-shadow:var(--shadow);
+}
+.stopcard h3{font-size:15px; font-weight:700; line-height:1.35}
+.stopcard p{margin:5px 0 0; font-size:13px; color:var(--ink-2); line-height:1.62}
+.meta{
+  display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:9px;
+  padding-top:9px; border-top:1px dashed var(--rule);
+}
+.yen{
+  font-family:var(--sign); font-weight:600; font-size:12px; color:var(--ink-2);
+  font-variant-numeric:tabular-nums;
+}
+.nav{
+  margin-left:auto; font-family:var(--sign); font-weight:600; font-size:12px;
+  letter-spacing:.04em; color:var(--l1); text-decoration:none;
+  border:1px solid var(--rule-strong); border-radius:5px; padding:3px 9px;
+  white-space:nowrap;
+}
+.nav:hover{border-color:var(--l1)}
+.alt{border-left:3px solid var(--rule-strong)}
+.alt h3::after{
+  content:"替代方案"; font-family:var(--sign); font-size:10px; font-weight:600;
+  letter-spacing:.1em; color:var(--muted); margin-left:7px; vertical-align:2px;
+}
+/* ---- transfer marker between cities ---- */
+.transfer{
+  display:flex; align-items:center; gap:10px; margin:2px 0 12px 36px;
+  font-family:var(--sign); font-size:12.5px; font-weight:600;
+  letter-spacing:.05em; color:var(--ink-2);
+}
+.transfer::before{
+  content:"⇄"; flex:none; width:22px; height:22px; border-radius:50%;
+  background:var(--ink); color:var(--paper); display:grid; place-items:center;
+  font-size:12px;
+}
+/* ---- reference sections ---- */
+.ref{
+  background:var(--surface); border:1px solid var(--rule); border-radius:10px;
+  box-shadow:var(--shadow); padding:16px 15px; margin-bottom:14px;
+}
+.ref h2{
+  font-family:var(--sign); font-size:13px; font-weight:700;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+  padding-bottom:9px; border-bottom:1px solid var(--rule); margin-bottom:11px;
+}
+.kv{display:grid; grid-template-columns:auto 1fr; gap:7px 14px; font-size:13.5px}
+.kv dt{font-family:var(--sign); font-weight:600; color:var(--muted); letter-spacing:.03em; white-space:nowrap}
+.kv dd{margin:0; color:var(--ink-2); font-variant-numeric:tabular-nums}
+.ref ul{margin:0; padding-left:18px; font-size:13.5px; color:var(--ink-2)}
+.ref li{margin-bottom:6px}
+.ref li:last-child{margin-bottom:0}
+.tel{font-family:var(--sign); font-weight:700; font-variant-numeric:tabular-nums; color:var(--ink)}
+.foot{
+  margin-top:26px; padding-top:14px; border-top:1px solid var(--rule);
+  font-size:12px; color:var(--muted); text-align:center; font-family:var(--sign);
+  letter-spacing:.04em;
+}
+@media (max-width:420px){
+  .strip{grid-template-columns:repeat(2,1fr)}
+  .strip div:nth-child(3){border-left:none}
+  .strip div:nth-child(n+3){border-top:1px solid var(--rule)}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="kicker">
+    <span class="eyebrow">国庆假期 · 关西</span>
+    <span class="eyebrow" style="color:var(--l3)">5 晚 6 天</span>
+  </div>
+  <h1>京都 · 大阪<span class="jp">KYOTO — OSAKA</span></h1>
+  <div class="dates">
+    <span><b>10/3</b> 傍晚抵达 KIX</span>
+    <span><b>10/8</b> 14:00 KIX 起飞</span>
+  </div>
+</header>
+
+<div class="strip">
+  <div>
+    <div class="p">KIX</div>
+    <div class="n">10/3 抵达</div>
+    <div class="bar" style="background:var(--rule-strong)"></div>
+  </div>
+  <div>
+    <div class="p">京都</div>
+    <div class="n">2 晚 · 10/3–4</div>
+    <div class="bar" style="background:var(--l1)"></div>
+  </div>
+  <div>
+    <div class="p">大阪</div>
+    <div class="n">3 晚 · 10/5–7</div>
+    <div class="bar" style="background:var(--l4)"></div>
+  </div>
+  <div>
+    <div class="p">KIX</div>
+    <div class="n">10/8 返程</div>
+    <div class="bar" style="background:var(--rule-strong)"></div>
+  </div>
+</div>
+
+<section class="mapcard">
+  <h2>区域关系图</h2>
+  <p>相对位置示意，非实际比例。数字为标注的行程天数。</p>
+  <svg viewBox="0 0 400 268" role="img" aria-label="关西地区示意图：京都在北，宇治与奈良在东南，大阪在西南，关西机场在最南">
+    <!-- rails -->
+    <g stroke-linecap="round" fill="none" stroke-width="3.5">
+      <!-- Kyoto -> Uji -> Nara -->
+      <path d="M150 52 L196 96" stroke="var(--l2)"/>
+      <path d="M196 96 L262 148" stroke="var(--l4)"/>
+      <!-- Kyoto -> Arashiyama / Fushimi -->
+      <path d="M150 52 L74 66" stroke="var(--l3)"/>
+      <path d="M150 52 L164 104" stroke="var(--l3)"/>
+      <!-- Kyoto -> Osaka -->
+      <path d="M150 52 L96 152" stroke="var(--l4)" stroke-dasharray="1 8"/>
+      <!-- Nara -> Osaka -->
+      <path d="M262 148 L112 160" stroke="var(--l5)"/>
+      <!-- Osaka -> USJ -->
+      <path d="M96 152 L44 130" stroke="var(--l6)"/>
+      <!-- Osaka -> KIX -->
+      <path d="M96 152 L64 232" stroke="var(--rule-strong)"/>
+      <!-- KIX -> Kyoto (arrival, HARUKA) -->
+      <path d="M64 232 L150 52" stroke="var(--l1)" stroke-dasharray="7 7" stroke-width="2.5"/>
+    </g>
+    <!-- nodes -->
+    <g>
+      <circle cx="150" cy="52" r="9" fill="var(--l1)"/>
+      <text x="164" y="46" font-size="14" fill="var(--ink)">京都</text>
+      <text x="164" y="60" font-size="10" fill="var(--muted)" letter-spacing="1">2 NIGHTS</text>
+
+      <circle cx="74" cy="66" r="5.5" fill="var(--l3)"/>
+      <text x="30" y="56" font-size="11" fill="var(--ink-2)">岚山 ③</text>
+
+      <circle cx="164" cy="104" r="5.5" fill="var(--l3)"/>
+      <text x="174" y="108" font-size="11" fill="var(--ink-2)">伏见稻荷 ③</text>
+
+      <circle cx="196" cy="96" r="5.5" fill="var(--l2)"/>
+      <text x="200" y="86" font-size="11" fill="var(--ink-2)">宇治 ②</text>
+
+      <circle cx="262" cy="148" r="7" fill="var(--l4)"/>
+      <text x="272" y="152" font-size="12" fill="var(--ink)">奈良 ④</text>
+
+      <circle cx="96" cy="152" r="9" fill="var(--l4)"/>
+      <text x="108" y="176" font-size="14" fill="var(--ink)">大阪</text>
+      <text x="108" y="190" font-size="10" fill="var(--muted)" letter-spacing="1">3 NIGHTS</text>
+
+      <circle cx="44" cy="130" r="5.5" fill="var(--l6)"/>
+      <text x="6" y="120" font-size="11" fill="var(--ink-2)">USJ ⑤</text>
+
+      <circle cx="64" cy="232" r="7" fill="var(--rule-strong)"/>
+      <text x="78" y="236" font-size="12" fill="var(--ink)">KIX 关西机场</text>
+    </g>
+    <!-- legend -->
+    <g font-size="10" fill="var(--muted)">
+      <line x1="232" y1="222" x2="256" y2="222" stroke="var(--l1)" stroke-width="2.5" stroke-dasharray="7 7"/>
+      <text x="262" y="226">抵达 HARUKA 75 min</text>
+      <line x1="232" y1="240" x2="256" y2="240" stroke="var(--l4)" stroke-width="3" stroke-dasharray="1 8"/>
+      <text x="262" y="244">换城 10/5</text>
+    </g>
+  </svg>
+</section>
+
+<section class="day" style="--ln:var(--l1)">
+  <div class="dayhead">
+    <div class="badge" style="background:var(--l1)"><div><div class="b1">1</div><div class="b2">10/3</div></div></div>
+    <div class="t">
+      <h2>抵达，直上京都</h2>
+      <div class="sub">周六 · 傍晚落地，当晚不安排远行</div>
+      <div class="bed">🛏 京都 · 京都站 / 河原町</div>
+    </div>
+  </div>
+  <ol class="line">
+    <li class="stop"><span class="dot">1</span>
+      <div class="stopcard">
+        <h3>关西国际机场 KIX</h3>
+        <p>下午 5–7 点落地。HARUKA 特急直达京都站约 75 分钟，是最省心的一趟；机场巴士约 90 分钟但能到酒店门口。</p>
+        <div class="meta"><span class="yen">HARUKA ¥3,430</span>
+          <a class="nav" href="https://maps.apple.com/?q=関西国際空港" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">2</span>
+      <div class="stopcard">
+        <h3>京都站 · 拉面小路</h3>
+        <p>入住后放行李。京都站伊势丹 10F 拉面小路，博多一幸舍、中村商店都在这层，落地第一餐不用走远。</p>
+        <div class="meta"><span class="yen">拉面 ¥1,000</span>
+          <a class="nav" href="https://maps.apple.com/?q=京都駅" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">3</span>
+      <div class="stopcard">
+        <h3>京都塔展望台</h3>
+        <p>就在京都站对面，还有精力就上去看一眼夜景，十几分钟的事，也算给行程开个场。</p>
+        <div class="meta"><span class="yen">展望台 ¥800</span>
+          <a class="nav" href="https://maps.apple.com/?q=京都タワー" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+  </ol>
+</section>
+
+<section class="day" style="--ln:var(--l2)">
+  <div class="dayhead">
+    <div class="badge" style="background:var(--l2)"><div><div class="b1">2</div><div class="b2">10/4</div></div></div>
+    <div class="t">
+      <h2>宇治抹茶，东山到鸭川</h2>
+      <div class="sub">周日 · 上午宇治，下午东山，傍晚鸭川</div>
+      <div class="bed">🛏 京都</div>
+    </div>
+  </div>
+  <ol class="line">
+    <li class="stop"><span class="dot">1</span>
+      <div class="stopcard">
+        <h3>宇治 · 平等院</h3>
+        <p>JR 奈良线约 20 分钟到宇治站。10 円硬币背面就是这座凤凰堂，正面水池的倒影是重点。9:00 前到，人少光也好。</p>
+        <div class="meta"><span class="yen">JR ¥240 · 门票 ¥600</span>
+          <a class="nav" href="https://maps.apple.com/?q=平等院" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">2</span>
+      <div class="stopcard">
+        <h3>宇治抹茶巡礼</h3>
+        <p>中村藤吉本店的生茶果冻和抹茶芭菲、伊藤久右卫门的茶点，沿宇治川走到宇治桥。这站慢慢逛，别赶。</p>
+        <div class="meta"><span class="yen">抹茶 ¥1,500</span>
+          <a class="nav" href="https://maps.apple.com/?q=中村藤吉本店" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">3</span>
+      <div class="stopcard">
+        <h3>清水寺</h3>
+        <p>下午回京都市区。清水舞台俯瞰全城，音羽瀑布三道水各有说法只能选一道。想穿和服在这一带租最合适。</p>
+        <div class="meta"><span class="yen">门票 ¥400 · 和服 ¥3,850</span>
+          <a class="nav" href="https://maps.apple.com/?q=清水寺" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">4</span>
+      <div class="stopcard">
+        <h3>八坂神社 → 鸭川</h3>
+        <p>二年坂三年坂快速穿过就好，人多且店铺同质。重点留给鸭川：四条大桥边有台阶可以直接下到河滩，坐在跳石上看日落，比挤石板路舒服得多。</p>
+        <div class="meta"><span class="yen">免费</span>
+          <a class="nav" href="https://maps.apple.com/?q=鴨川+四条大橋" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+  </ol>
+</section>
+
+<section class="day" style="--ln:var(--l3)">
+  <div class="dayhead">
+    <div class="badge" style="background:var(--l3)"><div><div class="b1">3</div><div class="b2">10/5</div></div></div>
+    <div class="t">
+      <h2>伏见稻荷、岚山，换城大阪</h2>
+      <div class="sub">周一 · 早起两站，午后带行李移动</div>
+      <div class="bed">🛏 大阪 · 难波</div>
+    </div>
+  </div>
+  <ol class="line">
+    <li class="stop"><span class="dot">1</span>
+      <div class="stopcard">
+        <h3>伏见稻荷大社</h3>
+        <p>千本鸟居，7:00–8:00 到基本没人，是全天唯一能拍到空镜的窗口。爬到山顶来回约 2 小时，只到中途的四辻折返也够看。JR 稻荷站下车即到。</p>
+        <div class="meta"><span class="yen">免费 · JR ¥150</span>
+          <a class="nav" href="https://maps.apple.com/?q=伏見稲荷大社" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">2</span>
+      <div class="stopcard">
+        <h3>岚山 · 竹林与渡月桥</h3>
+        <p>嵯峨野竹林小径、渡月桥、天龙寺庭园。午餐这边的汤豆腐比较对得起环境。想坐嵯峨野小火车要提前留出时间。</p>
+        <div class="meta"><span class="yen">天龙寺 ¥500 · 午餐 ¥1,800</span>
+          <a class="nav" href="https://maps.apple.com/?q=渡月橋" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+  </ol>
+  <div class="transfer">京都 → 大阪难波 · JR 或阪急约 45 分钟 · ¥560</div>
+  <ol class="line">
+    <li class="stop"><span class="dot">3</span>
+      <div class="stopcard">
+        <h3>难波 · 道顿堀</h3>
+        <p>入住后出门就是道顿堀。格力高招牌、章鱼烧、一兰拉面，戎桥上晚上永远在拍照。这一晚不用计划，随便走。</p>
+        <div class="meta"><span class="yen">晚餐 ¥2,000</span>
+          <a class="nav" href="https://maps.apple.com/?q=道頓堀" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+  </ol>
+</section>
+
+<section class="day" style="--ln:var(--l4)">
+  <div class="dayhead">
+    <div class="badge" style="background:var(--l4)"><div><div class="b1">4</div><div class="b2">10/6</div></div></div>
+    <div class="t">
+      <h2>奈良喂鹿，傍晚大阪城</h2>
+      <div class="sub">周二 · 大阪当天往返奈良</div>
+      <div class="bed">🛏 大阪 · 难波</div>
+    </div>
+  </div>
+  <ol class="line">
+    <li class="stop"><span class="dot">1</span>
+      <div class="stopcard">
+        <h3>东大寺</h3>
+        <p>近铁难波直达奈良约 45 分钟。世界最大的木造建筑，里面那尊奈良大佛值得站着看一会儿。9 点开门就到最好。</p>
+        <div class="meta"><span class="yen">近铁 ¥680 · 门票 ¥600</span>
+          <a class="nav" href="https://maps.apple.com/?q=東大寺" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">2</span>
+      <div class="stopcard">
+        <h3>奈良公园</h3>
+        <p>一千多头鹿散养在这儿。鹿仙贝 ¥200 一份，拿出来会被围住，举高、快速喂完是诀窍。会鞠躬的鹿真的存在。留 1–1.5 小时。</p>
+        <div class="meta"><span class="yen">鹿仙贝 ¥200</span>
+          <a class="nav" href="https://maps.apple.com/?q=奈良公園" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">3</span>
+      <div class="stopcard">
+        <h3>奈良町</h3>
+        <p>午餐往南走到奈良町，古民家改的餐厅，柿叶寿司和大和茶是本地做法。格子之家可以顺路看看，然后回大阪。</p>
+        <div class="meta"><span class="yen">午餐 ¥1,500</span>
+          <a class="nav" href="https://maps.apple.com/?q=奈良町" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">4</span>
+      <div class="stopcard">
+        <h3>大阪城</h3>
+        <p>傍晚回大阪补这一站。天守阁可以登顶俯瞰，护城河和西之丸庭园在夕阳下比正午好看。天守 17:00 停止入场，赶不上就在园里走走。</p>
+        <div class="meta"><span class="yen">天守阁 ¥600</span>
+          <a class="nav" href="https://maps.apple.com/?q=大阪城" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+  </ol>
+</section>
+
+<section class="day" style="--ln:var(--l6)">
+  <div class="dayhead">
+    <div class="badge" style="background:var(--l6)"><div><div class="b1">5</div><div class="b2">10/7</div></div></div>
+    <div class="t">
+      <h2>环球影城，或者海游馆</h2>
+      <div class="sub">周三 · 二选一，都是一整天</div>
+      <div class="bed">🛏 大阪 · 难波</div>
+    </div>
+  </div>
+  <ol class="line">
+    <li class="stop"><span class="dot">1</span>
+      <div class="stopcard">
+        <h3>USJ 环球影城</h3>
+        <p>地铁加 JR 约 30 分钟到 ユニバーサルシティ 站。哈利波特、超级任天堂世界、小黄人。国庆期间热门项目排队 1–2 小时，快速通行券基本是必需品，且要提前在官网买。</p>
+        <div class="meta"><span class="yen">门票 ¥8,900 起 · 快票 ¥7,800 起</span>
+          <a class="nav" href="https://maps.apple.com/?q=ユニバーサル・スタジオ・ジャパン" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">2</span>
+      <div class="stopcard alt">
+        <h3>海游馆</h3>
+        <p>不想排队和坐过山车就换这边。世界级水族馆，中央那缸太平洋鲸鲨是招牌。旁边天保山大摩天轮 ¥1,000，节奏轻松很多。</p>
+        <div class="meta"><span class="yen">门票 ¥2,700 · 摩天轮 ¥1,000</span>
+          <a class="nav" href="https://maps.apple.com/?q=海遊館" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">3</span>
+      <div class="stopcard">
+        <h3>天保山 · 食街晚餐</h3>
+        <p>海游馆旁边的なにわ食いしんぼ横丁，复刻昭和街景的美食街，章鱼烧、串炸、大阪烧都有。玩完就近吃了再回难波。</p>
+        <div class="meta"><span class="yen">晚餐 ¥1,500</span>
+          <a class="nav" href="https://maps.apple.com/?q=天保山マーケットプレース" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+  </ol>
+</section>
+
+<section class="day" style="--ln:var(--l5)">
+  <div class="dayhead">
+    <div class="badge" style="background:var(--l5)"><div><div class="b1">6</div><div class="b2">10/8</div></div></div>
+    <div class="t">
+      <h2>心斋桥扫货，从难波走</h2>
+      <div class="sub">周四 · 14:00 起飞，上午完整可用</div>
+      <div class="bed">✈ 难波 → KIX 仅 38 分钟</div>
+    </div>
+  </div>
+  <ol class="line">
+    <li class="stop"><span class="dot">1</span>
+      <div class="stopcard">
+        <h3>黑门市场</h3>
+        <p>大阪的厨房，离难波走路就到。海鲜丼、神户牛串、现烤扇贝、切好的水果，当早餐吃得很饱。8:30 左右店陆续开。</p>
+        <div class="meta"><span class="yen">早餐 ¥1,500</span>
+          <a class="nav" href="https://maps.apple.com/?q=黒門市場" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">2</span>
+      <div class="stopcard">
+        <h3>心斋桥筋</h3>
+        <p>最后的采购主场。松本清、唐吉诃德、BIC CAMERA、优衣库、无印良品全在这条拱廊上，药妆零食电器一次搞定。带好护照退税。10:30 前收工回酒店拿行李。</p>
+        <div class="meta"><span class="yen">按清单</span>
+          <a class="nav" href="https://maps.apple.com/?q=心斎橋筋商店街" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+    <li class="stop"><span class="dot">3</span>
+      <div class="stopcard">
+        <h3>难波 → 关西机场</h3>
+        <p>南海电铁 Rapi:t 特急 38 分钟直达。11:00 出发，11:40 到，12:00 前值机完，离起飞还有两小时。这是把大阪放在最后一晚最大的好处。</p>
+        <div class="meta"><span class="yen">Rapi:t ¥1,450</span>
+          <a class="nav" href="https://maps.apple.com/?q=南海難波駅" target="_blank" rel="noopener">导航</a></div>
+      </div></li>
+  </ol>
+</section>
+
+<section class="ref">
+  <h2>交通与票券</h2>
+  <ul>
+    <li><b>ICOCA</b> — 落地先办，地铁、JR、便利店都能刷，省去每次买票。</li>
+    <li><b>HARUKA 特急</b> — 10/3 机场进京都，¥3,430，75 分钟。</li>
+    <li><b>Rapi:t 特急</b> — 10/8 难波回机场，¥1,450，38 分钟。</li>
+    <li><b>关西周游券 Kansai Thru Pass</b> — 2 日或 3 日券，地铁巴士无限次。按这份行程，10/5–10/7 三天在大阪京都之间跑，用 3 日券基本能回本；只打算刷 ICOCA 也完全可行。</li>
+  </ul>
+</section>
+
+<section class="ref">
+  <h2>预算参考 · 每人每天</h2>
+  <dl class="kv">
+    <dt>住宿</dt><dd>¥6,000 – 10,000（双人一间均摊后更低）</dd>
+    <dt>市内交通</dt><dd>¥800 – 1,500</dd>
+    <dt>门票</dt><dd>¥500 – 1,500（10/7 环球日 ¥17,000 上下）</dd>
+    <dt>三餐</dt><dd>¥4,000 – 6,000</dd>
+    <dt>购物</dt><dd>按清单，集中在 10/8</dd>
+  </dl>
+</section>
+
+<section class="ref">
+  <h2>要记的几件事</h2>
+  <ul>
+    <li>只搬一次行李 —— 10/5 从京都到大阪。前两晚京都、后三晚大阪，中间不用来回折腾。</li>
+    <li>两个必须早起的早上：10/4 去宇治（9:00 到平等院）、10/5 去伏见稻荷（7:00–8:00）。</li>
+    <li>USJ 快速通行券要提前在官网买，国庆期间当天现场基本买不到。</li>
+    <li>退税记得带护照，心斋桥各家门店都能办。</li>
+  </ul>
+</section>
+
+<section class="ref">
+  <h2>紧急联络</h2>
+  <dl class="kv">
+    <dt>中国驻大阪总领馆</dt><dd class="tel">06-6445-9481</dd>
+    <dt>急救 / 消防</dt><dd class="tel">119</dd>
+    <dt>警察</dt><dd class="tel">110</dd>
+  </dl>
+</section>
+
+<div class="foot">点任意一站的「导航」可在手机地图中打开 · 行程更新后本页自动刷新</div>
+
+</div>
